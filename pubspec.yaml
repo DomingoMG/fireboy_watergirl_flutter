@@ -1,0 +1,38 @@
+name: fireboy_and_watergirl
+description: "A new Flutter project."
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: ^3.5.4
+
+dependencies:
+  flame: ^1.25.0
+  flame_audio: ^2.11.0
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+
+  flutter_lints: ^4.0.0
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/audio/
+    - assets/images/background/
+    - assets/images/buttons/
+    - assets/images/characters/
+    - assets/images/doors/
+    - assets/images/elevators/buttons/
+    - assets/images/elevators/horizontal/
+    - assets/images/elevators/vertical/
+    - assets/images/gems/
+    - assets/images/levers/
+    - assets/images/misc/
+    - assets/images/pools/
+    - assets/images/terrain/
+    - assets/images/levels/
+
