@@ -1,6 +1,6 @@
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
-import 'package:fireboy_and_watergirl/menus.dart';
+import 'package:fireboy_and_watergirl/main_menu.dart';
 import 'package:fireboy_and_watergirl/fireboy_and_watergirl_game.dart';
 
 void main() {
