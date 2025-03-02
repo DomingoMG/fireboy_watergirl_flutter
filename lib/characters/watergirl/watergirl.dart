@@ -8,18 +8,8 @@ class WaterGirlAnimation extends CharacterAnimation {
     characterType: 'watergirl',
     anchor: Anchor.center,
     size: Vector2(64, 64),
-    position: Vector2(98, 640)
+    position: Vector2(83, 650)
   );
-
-  @override
-  void resetPosition() {
-    position = initialPosition;
-    velocity.setValues(0, 0); 
-    onGround = false;
-    isJumping = false;
-    isAlive = true;
-    animation = idleAnimation; 
-  }
 
   @override
   void jump(Set<LogicalKeyboardKey> keysPressed) {
