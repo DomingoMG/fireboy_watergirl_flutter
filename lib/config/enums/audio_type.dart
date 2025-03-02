@@ -6,6 +6,7 @@ enum AudioType {
   fan(assetName: 'fan.mp3'),
   coin(assetName: 'coin.mp3'),
   death(assetName: 'death.mp3'),
+  levelComplete(assetName: 'level_complete.mp3'),
   musicIntro(assetName: 'music_intro.mp3'),
   musicLevel(assetName: 'music_level.mp3');
 
