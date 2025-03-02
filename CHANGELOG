@@ -1,3 +1,15 @@
+## [0.0.2] 2025-03-03 - Enhanced Visuals and Camera Dynamics Update
+### Added
+- Implemented camera follow feature for Fireboy with a max speed of 300.
+- Updated main menu background to display a logo image instead of a plain black background.
+- Applied a dark overlay to the logo image in the main menu for better visibility.
+
+### Changed
+- Replaced the background color in the main menu from solid black to an image-based background.
+
+### Fixed
+- General improvements to UI consistency.
+
 ## [0.0.1] 2025-03-02 - Gameplay Enhancements and Asset Optimization
 ### 🔥 Features
 - Implemented `FireBoyAndWaterGirlGame` core logic.
