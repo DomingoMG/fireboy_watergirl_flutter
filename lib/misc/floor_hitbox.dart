@@ -1,12 +1,12 @@
-import 'package:fireboy_and_watergirl/characters/character_animation.dart';
-import 'package:fireboy_and_watergirl/characters/fireboy/fireboy.dart';
-import 'package:fireboy_and_watergirl/characters/watergirl/watergirl.dart';
 import 'package:flame/components.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/events.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:fireboy_and_watergirl/main.dart';
+import 'package:fireboy_and_watergirl/fireboy_and_watergirl_game.dart';
+import 'package:fireboy_and_watergirl/characters/character_animation.dart';
+import 'package:fireboy_and_watergirl/characters/fireboy/fireboy.dart';
+import 'package:fireboy_and_watergirl/characters/watergirl/watergirl.dart';
 
 class FloorHitbox extends PositionComponent with CollisionCallbacks, DragCallbacks, HasGameReference<FireBoyAndWaterGirlGame> {
   FloorHitbox({
@@ -50,12 +50,13 @@ class FloorHitbox extends PositionComponent with CollisionCallbacks, DragCallbac
       // Determina la dirección de la colisión
       if (bottomDiff < topDiff && bottomDiff < leftDiff && bottomDiff < rightDiff) {
         // Colisión con el suelo (parte superior del bloque)
-        if ( character?.onGround == false ) {
+        if ( other.onGround == false ) {
           other.position.y = blockTop - other.size.y+32;
           character?.velocity.y = 0;
           character?.onGround = true;
           debugPrint("📏 Colisión con el SUELO (parte superior del bloque)");
         }
+  
       } else if (topDiff < bottomDiff && topDiff < leftDiff && topDiff < rightDiff) {
         // Colisión con el techo (parte inferior del bloque)
         character?.velocity.y = 0;
@@ -78,7 +79,7 @@ class FloorHitbox extends PositionComponent with CollisionCallbacks, DragCallbac
 
   @override
   void onCollisionEnd(PositionComponent other) {
-    if( other is CharacterAnimation ) {
+    if( other is CharacterAnimation && other.onGround == true ){
       other.onGround = false;
     }
     super.onCollisionEnd(other);

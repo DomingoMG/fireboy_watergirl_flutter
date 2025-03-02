@@ -1,8 +1,8 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/services.dart' show KeyEvent, LogicalKeyboardKey;
-import 'package:fireboy_and_watergirl/main.dart';
 import 'package:fireboy_and_watergirl/config/config.dart';
+import 'package:fireboy_and_watergirl/fireboy_and_watergirl_game.dart';
 
 abstract class CharacterAnimation extends SpriteAnimationComponent
     with HasGameReference<FireBoyAndWaterGirlGame>, KeyboardHandler, CollisionCallbacks {
@@ -33,6 +33,7 @@ abstract class CharacterAnimation extends SpriteAnimationComponent
   bool isAlive = true;
   bool isJumping = false;
   bool onGround = false;
+  bool stopMoving = false;
 
   @override
   Future<void> onLoad() async {
@@ -68,6 +69,8 @@ abstract class CharacterAnimation extends SpriteAnimationComponent
 
   @override
   bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
+    if( stopMoving ) return true;
+    
     velocity.x = 0;
     move(keysPressed);
     jump(keysPressed);
@@ -84,6 +87,13 @@ abstract class CharacterAnimation extends SpriteAnimationComponent
     onGround = false;
     isJumping = false;
     isAlive = true;
+    stopMoving = false;
     animation = idleAnimation; 
+  }
+
+  void finishLevel() {
+    animation = idleAnimation;
+    velocity.setValues(0, 0);
+    stopMoving = true;
   }
 }

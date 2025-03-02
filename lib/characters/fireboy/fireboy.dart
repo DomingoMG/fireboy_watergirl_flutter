@@ -8,7 +8,7 @@ class FireboyAnimation extends CharacterAnimation {
     characterType: 'fireboy',
     anchor: Anchor.center,
     size: Vector2(64, 64),
-    position: Vector2(83, 650)
+    position: Vector2(53, 650)
   );
   
   @override
