@@ -79,7 +79,10 @@ abstract class CharacterAnimation extends SpriteAnimationComponent
 
   void move(Set<LogicalKeyboardKey> keysPressed);
   void jump(Set<LogicalKeyboardKey> keysPressed);
-  void dead();
+  void dead() {
+    AudioManager.playSound(AudioType.death);
+    resetPosition();
+  }
 
   void resetPosition() {
     position = initialPosition;

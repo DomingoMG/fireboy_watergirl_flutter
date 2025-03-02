@@ -34,10 +34,4 @@ class FireboyAnimation extends CharacterAnimation {
       animation = idleAnimation;
     }
   }
-  
-  @override
-  void dead() {
-    AudioManager.playSound(AudioType.death);
-    resetPosition();
-  }
 }

@@ -34,10 +34,4 @@ class WaterGirlAnimation extends CharacterAnimation {
       animation = idleAnimation;
     }
   }
-  
-  @override
-  void dead() {
-    AudioManager.playSound(AudioType.death);
-    resetPosition();
-  }
 }
