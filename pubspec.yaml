@@ -1,7 +1,10 @@
 name: fireboy_and_watergirl
-description: "A new Flutter project."
+description: "A cooperative puzzle-platformer game inspired by Fireboy and Watergirl, built with Flutter and Flame."
+homepage: "https://github.com/DomingoMG/fireboy_watergirl_flutter"
+repository: "https://github.com/DomingoMG/fireboy_watergirl_flutter"
+issue_tracker: "https://github.com/DomingoMG/fireboy_watergirl_flutter/issues"
 publish_to: 'none'
-version: 0.1.0
+version: 0.0.1
 
 environment:
   sdk: ^3.5.4
