@@ -19,6 +19,9 @@ This is a learning project built with Flutter and Flame Engine, inspired by Fire
 # 🎯 Purpose
 This project was built just for learning and practice. It is not an official or commercial game, but an experiment to understand game mechanics, physics, and multiplayer logic in Flutter.
 
+# 🚀 Live Demo
+Try out the game here: [Live Demo](https://domingomg.github.io/fireboy_watergirl_flutter/)
+
 ## 📸 Screenshots
 
 ### **🕹️ Main Menu**
