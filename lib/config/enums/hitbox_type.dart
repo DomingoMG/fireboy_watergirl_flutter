@@ -1,5 +1,7 @@
 
 enum HitboxType { 
+  blueDoor(assetName: 'doors/blue_door_close.png'),
+  redDoor(assetName: 'doors/red_door_close.png'),
   lavaPlatform(assetName: 'pools/large_lava_pool.png'),
   waterPlatform(assetName: 'pools/large_water_pool.png'),
   icePlatform(assetName: 'levels/ice_platform.png'),
