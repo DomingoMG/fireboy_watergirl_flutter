@@ -30,7 +30,13 @@ class _MainMenuState extends State<MainMenu> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.black,
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: const AssetImage('assets/images/logo/fireboy_watergirl_logo.png'),
+          colorFilter: ColorFilter.mode(Colors.black.withValues(alpha: 0.8), BlendMode.darken),
+          fit: BoxFit.fitWidth,
+        )
+      ),
       child: CustomScrollView(
         slivers: [
           SliverFillRemaining(
