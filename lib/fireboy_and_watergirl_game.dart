@@ -55,7 +55,7 @@ class FireBoyAndWaterGirlGame extends FlameGame with KeyboardEvents, HasCollisio
     ]);
 
     // The camera follows Fireboy
-    // camera.follow(fireBoy, maxSpeed: 300);
+    camera.follow(fireBoy, maxSpeed: 300);
   }
 
   @override
