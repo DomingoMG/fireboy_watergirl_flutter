@@ -19,8 +19,27 @@ This is a learning project built with Flutter and Flame Engine, inspired by Fire
 # 🎯 Purpose
 This project was built just for learning and practice. It is not an official or commercial game, but an experiment to understand game mechanics, physics, and multiplayer logic in Flutter.
 
-# 📸 Screenshots
-(Coming soon!)
+## 📸 Screenshots
+
+### **🕹️ Main Menu**
+The starting point of the game where players can navigate through the menu options before beginning their adventure.
+<img src="/screenshots/00-main-menu.png" alt="Main Menu" width="400">
+
+### **🚀 Game Start**
+The initial game screen where players take control of Fire & Water, ready to explore the level and solve challenges together.
+<img src="/screenshots/01-game-start.png" alt="Game Start" width="400">
+
+### **🌬️ Fan Mechanism Section**
+A section in the game where a fan mechanism affects player movement, requiring strategic coordination to progress.
+<img src="/screenshots/02-game-fan-zone.png" alt="Fan Mechanism Section" width="400">
+
+### **🌍 Central Game Scene**
+A mid-level view showcasing both characters navigating through the environment, dealing with obstacles and platforms.
+<img src="/screenshots/03-game-center-view.png" alt="Central Game Scene" width="400">
+
+### **🏆 Level Completion Screen**
+The final screen of a level, marking successful completion after overcoming all challenges.
+<img src="/screenshots/04-game-finish.png" alt="Level Completion" width="400">
 
 # 📝 Disclaimer
 This project is not affiliated with Fireboy and Watergirl. It is a personal learning project and should not be considered a commercial product.
