@@ -1,3 +1,20 @@
+## [0.0.3] 2025-03-03 - Fixed Asset Visibility Issue
+### 🛠️ Fixed
+- Resolved an issue where certain assets were not displaying in the release version, despite working correctly in `debug` mode.
+- Identified that the methods `onDragStart`, `onDragUpdate`, `onDragEnd`, and render were affecting the visibility of elements in `release`.
+- Temporarily disabled these methods to ensure proper asset loading and rendering across all versions.
+
+### 🚀 Optimized Image Loading
+- Verified the loading of `large_lava_pool.png` and other assets in puddles/, ensuring their correct reference in the code.
+- Confirmed that the path `puddles/large_lava_pool.png` is correct and prevented duplication of `assets/images/`.
+- Improved game stability in `release`, avoiding path resolution issues.
+
+### 🔍 Debugging and Testing
+- Conducted tests in `release` mode (`flutter run --release`) to verify proper asset visibility.
+- Adjusted `size` handling within `DragCallbacks` methods to prevent invalid values in `release`.
+- Ensured proper behavior of `Hitbox` components in the production environment.
+
+
 ## [0.0.2] 2025-03-03 - Enhanced Visuals and Camera Dynamics Update
 ### Added
 - Implemented camera follow feature for Fireboy with a max speed of 300.
@@ -7,7 +24,7 @@
 ### Changed
 - Replaced the background color in the main menu from solid black to an image-based background.
 
-### Fixed
+### 🛠️ Fixed
 - General improvements to UI consistency.
 
 ## [0.0.1] 2025-03-02 - Gameplay Enhancements and Asset Optimization
