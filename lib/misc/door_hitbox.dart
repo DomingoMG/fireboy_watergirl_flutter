@@ -96,6 +96,7 @@ class DoorHitbox extends SpriteComponent with CollisionCallbacks, DragCallbacks,
 
   @override
   void render(Canvas canvas) {
+    if( !kDebugMode ) return;
     final paint = Paint()..color = Colors.red.withValues(alpha: 0.5);
     canvas.drawRect(
       Rect.fromLTWH(size.x - resizeThreshold, size.y - resizeThreshold, resizeThreshold, resizeThreshold),
