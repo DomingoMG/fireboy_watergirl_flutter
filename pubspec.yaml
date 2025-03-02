@@ -7,19 +7,23 @@ environment:
   sdk: ^3.5.4
 
 dependencies:
+  gap: ^3.0.1
   flame: ^1.25.0
   flame_audio: ^2.11.0
   flutter:
     sdk: flutter
 
 dev_dependencies:
-
   flutter_lints: ^4.0.0
   flutter_test:
     sdk: flutter
 
 flutter:
   uses-material-design: true
+  fonts:
+    - family: custom_font
+      fonts:
+        - asset: assets/fonts/custom_font.TTF
   assets:
     - assets/audio/
     - assets/images/background/
@@ -32,7 +36,6 @@ flutter:
     - assets/images/gems/
     - assets/images/levers/
     - assets/images/misc/
-    - assets/images/pools/
+    - assets/images/puddles/
     - assets/images/terrain/
     - assets/images/levels/
-
