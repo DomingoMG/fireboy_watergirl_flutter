@@ -4,7 +4,8 @@ import 'package:flame/events.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fireboy_and_watergirl/misc/misc.dart';
-import 'package:fireboy_and_watergirl/main.dart';
+import 'package:fireboy_and_watergirl/config/enums/hitbox_type.dart';
+import 'package:fireboy_and_watergirl/fireboy_and_watergirl_game.dart';
 import 'package:fireboy_and_watergirl/characters/fireboy/fireboy.dart';
 import 'package:fireboy_and_watergirl/characters/watergirl/watergirl.dart';
 
@@ -26,7 +27,7 @@ class AcidPoolHitbox extends SpriteAnimationComponent with CollisionCallbacks, D
   @override
   Future<void> onLoad() async {
     animation = await game.loadSpriteAnimation(
-      'pools/large_acid_pool.png',
+      HitboxType.acidPlatform.assetName,
       SpriteAnimationData.sequenced(
         amount: 15, 
         stepTime: .1, 
