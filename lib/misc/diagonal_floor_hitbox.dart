@@ -1,6 +1,7 @@
 import 'package:flame/components.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/events.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fireboy_and_watergirl/fireboy_and_watergirl_game.dart';
 import 'package:fireboy_and_watergirl/characters/character_animation.dart';
@@ -101,7 +102,8 @@ class DiagonalFloorHitbox extends PositionComponent with CollisionCallbacks, Dra
 
   @override
   void render(Canvas canvas) {
-     final paint = Paint()..color = Colors.red.withValues(alpha: 0.5);
+    if( !kDebugMode ) return;
+    final paint = Paint()..color = Colors.red.withValues(alpha: 0.5);
     canvas.drawRect(
       Rect.fromLTWH(size.x - resizeThreshold, size.y - resizeThreshold, resizeThreshold, resizeThreshold),
       paint,

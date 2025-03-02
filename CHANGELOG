@@ -1,0 +1,50 @@
+## [0.0.1] 2025-03-02 - Gameplay Enhancements and Asset Optimization
+### 🔥 Features
+- Implemented `FireBoyAndWaterGirlGame` core logic.
+- Added `MainMenu` overlay system with `overlayBuilderMap`.
+- Created a `main_menu.dart` file for handling UI interactions.
+- Implemented `CharacterAnimation` class for movement and collision handling.
+- Added new `finishLevel()` method for player animation control.
+
+### 🎮 Gameplay Improvements
+- Stopped movement when a level is finished using `stopMoving` boolean.
+- Added player position reset upon level completion.
+- Implemented `onKeyEvent` handling logic to prevent movement when `stopMoving` is enabled.
+
+### 📦 Asset Management
+- Updated sound effects (`button_click.mp3`, `button_hover.mp3`, `fan.mp3`) to normalize audio levels.
+- Added a new custom font (`custom_font.TTF`) for UI text.
+- Optimized `large_acid_pool.png`, `large_lava_pool.png`, and `large_water_pool.png` assets.
+
+### 🛠️ Code Refactoring
+- Reorganized `import` statements for better structure.
+- Changed file references to use enums instead of hardcoded asset paths.
+- Applied `HitboxType` to dynamically load sprites in `acid_pool_hitbox.dart` and `lava_pool_hitbox.dart`.
+- Optimized `AudioManager` to support `Future<void>` for async audio playback.
+- Updated `audio_type.dart` to include a new `levelComplete` sound.
+
+### 🏗️ Level Design
+- Updated `level_1.dart` to include:
+  - New door and platform logic.
+  - Collision handling for Fireboy and Watergirl.
+  - Sound effect for level completion.
+  - Zoom-in camera effect when a level is completed.
+
+### 🏆 Game Mechanics
+- Implemented hitboxes for:
+  - Doors (`door_hitbox.dart`).
+  - Platforms (`floor_hitbox.dart`).
+  - Acid pools (`acid_pool_hitbox.dart`).
+  - Lava pools (`lava_pool_hitbox.dart`).
+  - Water pools (`water_pool_hitbox.dart`).
+  - Diamonds (`diamond_hitbox.dart`).
+
+### 🔧 Debugging Enhancements
+- Added `kDebugMode` check to prevent debug hitboxes from rendering in production.
+- Fixed hitbox inconsistencies in `floor_hitbox.dart`.
+- Adjusted platform and character positioning for better gameplay flow.
+
+### 🛠️ Dependency Updates
+- Added `gap: 3.0.1` to `pubspec.lock`.
+---
+These updates focus on improving gameplay mechanics, optimizing assets, and refactoring the codebase for better performance and maintainability.
