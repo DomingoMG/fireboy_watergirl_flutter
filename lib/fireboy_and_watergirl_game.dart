@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:fireboy_and_watergirl/misc/jump_button.dart';
 import 'package:flame/camera.dart';
 import 'package:flame/components.dart';
-import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flutter/foundation.dart';
