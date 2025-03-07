@@ -48,6 +48,7 @@ flutter:
         - asset: assets/fonts/custom_font.TTF
   assets:
     - assets/audio/
+    - assets/images/joystick/
     - assets/images/logo/
     - assets/images/background/
     - assets/images/buttons/

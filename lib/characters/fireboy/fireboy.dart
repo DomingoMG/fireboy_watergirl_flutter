@@ -11,19 +11,25 @@ class FireboyAnimation extends CharacterAnimation {
     position: Vector2(53, 650)
   );
   
+  
   @override
-  void jump(Set<LogicalKeyboardKey> keysPressed) {
-    if (keysPressed.contains(LogicalKeyboardKey.keyW) && onGround) {
-      AudioManager.playSound(AudioType.fireboyJump);
-      animation = jumpAnimation;
-      velocity.y = jumpPower;
-      isJumping = true;
-      onGround = false;
+  void jumpFromKeyEvent(Set<LogicalKeyboardKey> keysPressed) {
+    if (keysPressed.contains(LogicalKeyboardKey.keyW)) {
+      jump();
     }
   }
 
-  @override
-  void move(Set<LogicalKeyboardKey> keysPressed) {
+  void jump() {
+    if( !onGround ) return;
+    AudioManager.playSound(AudioType.fireboyJump);
+    animation = jumpAnimation;
+    velocity.y = jumpPower;
+    isJumping = true;
+    onGround = false;
+  }
+
+ @override
+  void moveFromKeyEvent(Set<LogicalKeyboardKey> keysPressed) {
     if (keysPressed.contains(LogicalKeyboardKey.keyA)) {
       animation = walkLeftAnimation;
       velocity.x = -speed;

@@ -12,18 +12,22 @@ class WaterGirlAnimation extends CharacterAnimation {
   );
 
   @override
-  void jump(Set<LogicalKeyboardKey> keysPressed) {
+  void jumpFromKeyEvent(Set<LogicalKeyboardKey> keysPressed) {
     if (keysPressed.contains(LogicalKeyboardKey.arrowUp) && onGround) {
-      AudioManager.playSound(AudioType.waterGirlJump);
-      animation = jumpAnimation;
-      velocity.y = jumpPower;
-      isJumping = true;
-      onGround = false;
+      jump();
     }
   }
 
+  void jump() {
+    AudioManager.playSound(AudioType.waterGirlJump);
+    animation = jumpAnimation;
+    velocity.y = jumpPower;
+    isJumping = true;
+    onGround = false;
+  }
+
   @override
-  void move(Set<LogicalKeyboardKey> keysPressed) {
+  void moveFromKeyEvent(Set<LogicalKeyboardKey> keysPressed) {
     if (keysPressed.contains(LogicalKeyboardKey.arrowLeft)) {
       animation = walkLeftAnimation;
       velocity.x = -speed;

@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'package:fireboy_and_watergirl/misc/jump_button.dart';
 import 'package:flame/camera.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
+import 'package:flame/input.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -14,6 +16,9 @@ import 'package:fireboy_and_watergirl/config/audio/audio_manager.dart';
 
 
 class FireBoyAndWaterGirlGame extends FlameGame with KeyboardEvents, HasCollisionDetection {
+  
+  late JoystickComponent joystick;  
+  late JumpButton jumpButton;
   late FireboyAnimation fireBoy;  
   late WaterGirlAnimation waterGirl;
   LevelOneSprite? level;
@@ -29,38 +34,58 @@ class FireBoyAndWaterGirlGame extends FlameGame with KeyboardEvents, HasCollisio
 
   Future<void> startGame() async {
     debugMode = kDebugMode;
-    final world = FireboyAndWaterGirlWorld();
     await AudioManager.init();
-    AudioManager.playMusicLevel();
+    // AudioManager.playMusicLevel();
 
-    // Camera configuration
+    final world = FireboyAndWaterGirlWorld();
+    final background = BackgroundOneSprite();
+    
+    level = LevelOneSprite();
+    fireBoy = FireboyAnimation();
+    waterGirl = WaterGirlAnimation();
     camera = CameraComponent(
       world: world,
       viewport: MaxViewport(),
     );
-
+      
     await addAll([world, camera]);
-
-    // Initialization of characters and objects
-    final background = BackgroundOneSprite();
-    level = LevelOneSprite();
-    fireBoy = FireboyAnimation();
-    waterGirl = WaterGirlAnimation();
-
+    await _addJoystick(); 
     await world.addAll([
       background,
       level!,
       fireBoy,
-      waterGirl,
-    ]);
+      waterGirl
+    ]);   
+    fireBoy.joystick = joystick;
 
     // The camera follows Fireboy
     camera.follow(fireBoy, maxSpeed: 300);
   }
 
+  Future<void> _addJoystick() async {
+    joystick = JoystickComponent(
+      knob: SpriteComponent(
+        sprite: await loadSprite('joystick/controller_position.png'),
+        size: Vector2.all(50),
+      ),
+      background: SpriteComponent(
+        sprite: await loadSprite('joystick/controller_radius.png'),
+        size: Vector2.all(100),
+      ),
+      margin: const EdgeInsets.only(left: 20, bottom: 20),
+    );
+    jumpButton = JumpButton(fireBoy);  
+    camera.viewport.add(joystick);
+    camera.viewport.add(jumpButton);
+  }
+
+  
+
   @override
   void update(double dt) {
     super.update(dt);
+
+    // AudioManager.stopMusicLevel();
 
     if( level == null ) return;
 

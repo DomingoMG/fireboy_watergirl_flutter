@@ -19,6 +19,7 @@ abstract class CharacterAnimation extends SpriteAnimationComponent
   }
 
   final String characterType;
+  JoystickComponent? joystick;
   late SpriteAnimation idleAnimation;
   late SpriteAnimation walkRightAnimation;
   late SpriteAnimation walkLeftAnimation;
@@ -62,9 +63,30 @@ abstract class CharacterAnimation extends SpriteAnimationComponent
 
   @override
   void update(double dt) {
+    if (joystick != null) moveWithJoystick();
+
     position += velocity * dt;
     if (!onGround) velocity.y += gravity * dt;
     super.update(dt);
+  }
+
+  void moveWithJoystick() {
+    if (joystick != null) {
+      double threshold = 0.60; // 🔥 Requiere mover el joystick un 60% para que empiece a moverse
+      double joystickIntensity = joystick!.delta.length; // Cuánto se ha movido el joystick (0 - 1)
+      
+      if (joystickIntensity < threshold) {
+        velocity.x = 0; // Si no se empuja lo suficiente, no se mueve
+        animation = idleAnimation;
+      } else {
+        double normalizedSpeed = ((joystickIntensity - threshold) / (1 - threshold)).clamp(0.0, 1.0); 
+        velocity.x = joystick!.delta.x.sign * speed * normalizedSpeed; // Aplicar velocidad solo cuando pasa el umbral
+        animation = joystick!.delta.x < 0 ? walkLeftAnimation : walkRightAnimation;
+      }
+    } else {
+      velocity.x = 0;
+      animation = idleAnimation;
+    }
   }
 
   @override
@@ -72,13 +94,13 @@ abstract class CharacterAnimation extends SpriteAnimationComponent
     if( stopMoving ) return true;
     
     velocity.x = 0;
-    move(keysPressed);
-    jump(keysPressed);
+    moveFromKeyEvent(keysPressed);
+    jumpFromKeyEvent(keysPressed);
     return true;
   }
 
-  void move(Set<LogicalKeyboardKey> keysPressed);
-  void jump(Set<LogicalKeyboardKey> keysPressed);
+  void moveFromKeyEvent(Set<LogicalKeyboardKey> keysPressed);
+  void jumpFromKeyEvent(Set<LogicalKeyboardKey> keysPressed);
   void dead() {
     AudioManager.playSound(AudioType.death);
     resetPosition();
