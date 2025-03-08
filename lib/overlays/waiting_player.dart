@@ -74,8 +74,10 @@ class WaitingPlayerOverlay extends ConsumerWidget {
                                   fontSize: 24,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white,
-                                  letterSpacing: 1.5,
+                                  letterSpacing: 1.5
                                 ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ],
                           ),
