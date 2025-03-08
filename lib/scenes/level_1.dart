@@ -314,8 +314,8 @@ class LevelOneSprite extends SpriteComponent with HasGameReference<FireBoyAndWat
   Future<void> update(double dt) async {
     if (isFireboyAtDoor && isWaterGirlAtDoor && !playSoundComplete) {
       playSoundComplete = true;
-      game.fireBoy.finishLevel();
-      game.waterGirl.finishLevel();
+      game.fireBoy?.finishLevel();
+      game.waterGirl?.finishLevel();
       AudioManager.stopMusicLevel();
       AudioManager.playSound(AudioType.levelComplete);
       levelComplete = true;
