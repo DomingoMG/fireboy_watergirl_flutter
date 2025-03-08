@@ -18,8 +18,8 @@ class FireBoyAndWaterGirlGame extends FlameGame with KeyboardEvents, HasCollisio
   
   late JoystickComponent joystick;  
   late JumpButton jumpButton;
-  late FireboyAnimation fireBoy;  
-  late WaterGirlAnimation waterGirl;
+  FireboyAnimation? fireBoy;  
+  WaterGirlAnimation? waterGirl;
   LevelOneSprite? level;
 
   double baseZoom = 1.5;  // Zoom base
@@ -52,13 +52,13 @@ class FireBoyAndWaterGirlGame extends FlameGame with KeyboardEvents, HasCollisio
     await world.addAll([
       background,
       level!,
-      fireBoy,
-      waterGirl
+      fireBoy!,
+      waterGirl!
     ]);   
-    fireBoy.joystick = joystick;
+    fireBoy?.joystick = joystick;
 
     // The camera follows Fireboy
-    camera.follow(fireBoy, maxSpeed: 300);
+    camera.follow(fireBoy!, maxSpeed: 300);
   }
 
   Future<void> _addJoystick() async {
@@ -73,7 +73,7 @@ class FireBoyAndWaterGirlGame extends FlameGame with KeyboardEvents, HasCollisio
       ),
       margin: const EdgeInsets.only(left: 20, bottom: 20),
     );
-    jumpButton = JumpButton(fireBoy);  
+    jumpButton = JumpButton(fireBoy!);  
     camera.viewport.add(joystick);
     camera.viewport.add(jumpButton);
   }
@@ -93,7 +93,7 @@ class FireBoyAndWaterGirlGame extends FlameGame with KeyboardEvents, HasCollisio
     }
 
     // Adjust the zoom according to the distance between FireBoy and Watergirl
-    final distance = (fireBoy.position - waterGirl.position).length;
+    final distance = (fireBoy!.position - waterGirl!.position).length;
     final zoomFactor = (1 - (distance / maxDistance)).clamp(0.0, 1.0);
 
     camera.viewfinder.zoom =
@@ -102,8 +102,8 @@ class FireBoyAndWaterGirlGame extends FlameGame with KeyboardEvents, HasCollisio
 
   @override
   KeyEventResult onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
-    fireBoy.onKeyEvent(event, keysPressed);
-    waterGirl.onKeyEvent(event, keysPressed);
+    fireBoy?.onKeyEvent(event, keysPressed);
+    waterGirl?.onKeyEvent(event, keysPressed);
     return super.onKeyEvent(event, keysPressed);
   }
 
