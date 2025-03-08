@@ -16,7 +16,6 @@ class LobbyNotifier extends AsyncNotifier<List<LobbyModel>> {
     socketRepository.on('availableLobbies', (lobbiesJson) async {
       state = const AsyncLoading();
       if( lobbiesJson is! List ) return;
-      print(lobbiesJson);
       state = AsyncData(lobbiesJson.map((lobbyJson) {
         if (lobbyJson is! Map<String, dynamic>) return null;
         return LobbyModel.fromJson(lobbyJson);
