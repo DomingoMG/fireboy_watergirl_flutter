@@ -33,7 +33,7 @@ class LobbyItemWidget extends StatelessWidget {
         child: IgnorePointer(
           child: ListTile(
             leading: Image.asset('assets/images/logo/fireboy_watergirl_logo.png', width: 40, height: 40),
-            title: Text(lobby.lobbyId, style: const TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold)),
+            title: Text(lobby.lobbyId, style: const TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold), maxLines: 1, overflow: TextOverflow.ellipsis),
             subtitle: Text(lobby.players.map((p) => p.name).join(', '), style: const TextStyle(fontSize: 16, color: Colors.white)),
             trailing: const Icon(Icons.arrow_right_sharp, color: Colors.white),
           ),
