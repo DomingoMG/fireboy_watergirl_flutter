@@ -1,4 +1,7 @@
 import 'dart:async';
+import 'dart:io';
+import 'package:fireboy_and_watergirl/providers/game_provider.dart';
+import 'package:fireboy_and_watergirl/providers/player_provider.dart';
 import 'package:flame/camera.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
@@ -37,7 +40,8 @@ class FireBoyAndWaterGirlGame extends FlameGame with RiverpodGameMixin, Keyboard
     debugMode = kDebugMode;
     await AudioManager.init();
     // AudioManager.playMusicLevel();
-
+    final gameOnline = ref.read(providerGameStart).value;
+    final player = ref.read(providerPlayer);
     final world = FireboyAndWaterGirlWorld();
     final background = BackgroundOneSprite();
     
@@ -50,17 +54,32 @@ class FireBoyAndWaterGirlGame extends FlameGame with RiverpodGameMixin, Keyboard
     );
       
     await addAll([world, camera]);
-    await _addJoystick(); 
+
+    if( Platform.isAndroid || Platform.isIOS ) {
+      await _addJoystick(); 
+    }
     await world.addAll([
       background,
       level!,
       fireBoy!,
       waterGirl!
     ]);   
-    fireBoy?.joystick = joystick;
+
 
     // The camera follows Fireboy
-    camera.follow(fireBoy!, maxSpeed: 300);
+    if( gameOnline != null ) {
+      if(player.character == 'fireboy') {
+        camera.follow(fireBoy!, maxSpeed: 300);
+        if( Platform.isAndroid || Platform.isIOS ) {
+          fireBoy?.joystick = joystick;
+        }
+      } else {
+        camera.follow(waterGirl!, maxSpeed: 300);
+        if( Platform.isAndroid || Platform.isIOS ) {
+          waterGirl?.joystick = joystick;
+        }
+      }
+    }
   }
 
   Future<void> _addJoystick() async {
