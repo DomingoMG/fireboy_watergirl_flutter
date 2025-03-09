@@ -1,3 +1,4 @@
+import 'package:fireboy_and_watergirl/providers/player_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fireboy_and_watergirl/providers/socket_provider.dart';
@@ -9,11 +10,15 @@ class GameNotifier extends AsyncNotifier<GameStartModel> {
   @override
   Future<GameStartModel> build() {
     final socketRepository = ref.read(providerSocketRepository);
+    final player = ref.read(providerPlayer);
     socketRepository.on('gameStart', (gameJson) {
       debugPrint('GameStart: $gameJson');
       state = const AsyncLoading();
       if( gameJson is! Map<String, dynamic> ) return;
-      state = AsyncData(GameStartModel.fromGameStartJson(gameJson));
+      final gameModel = GameStartModel.fromGameStartJson(gameJson);
+      final playerFound = gameModel.players.firstWhere((p) => p.id == player.id);
+      player.character = playerFound.character;
+      state = AsyncData( gameModel );
     });
 
     socketRepository.on('playerLeft', ( playerLeftJson ) {
@@ -30,7 +35,7 @@ class GameNotifier extends AsyncNotifier<GameStartModel> {
 
     socketRepository.on('lobbyClosed', ( lobbyClosedJson ) {
       debugPrint('✅ Lobby ${lobbyClosedJson['lobbyId']} ha sido cerrado');
-      state = AsyncError('La lobby ${lobbyClosedJson['lobbyId']} ha sido cerrada', StackTrace.current);
+      state = AsyncError('The lobby has been closed by the host', StackTrace.current);
     });
 
     ref.onDispose(() => socketRepository.off('gameStart'));
