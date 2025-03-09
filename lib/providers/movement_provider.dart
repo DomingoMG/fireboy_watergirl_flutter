@@ -1,4 +1,5 @@
 import 'package:fireboy_and_watergirl/providers/game_provider.dart';
+import 'package:fireboy_and_watergirl/providers/player_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:fireboy_and_watergirl/providers/socket_provider.dart';
@@ -43,8 +44,9 @@ class PlayerMovementNotifier extends Notifier<PlayerMoveModel> {
     if( gameStart == null ) return;
     
     final socketRepository = ref.read(providerSocketRepository);
+    final player = ref.read(providerPlayer);
     final movement = PlayerMoveModel(
-      character: state.character,
+      character: player.character ?? state.character,
       playerId: state.playerId,
       lobbyId: state.lobbyId,
       action: action,
