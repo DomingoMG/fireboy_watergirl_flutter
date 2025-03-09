@@ -10,7 +10,7 @@ class PlayerNotifier extends Notifier<PlayerModel> {
     return PlayerModel(
       id: '',
       name: 'Player 1',
-      character: 'fireboy',
+      character: null,
     );
   }
   
