@@ -81,7 +81,7 @@ abstract class CharacterAnimation extends SpriteAnimationComponent
         moveFromKeyEvent(keyEventOnline, false);
         break;
       case PlayerMovementAction.jump:
-        jump();
+        jump(sendEvent: false);
         break;
       default:
         moveFromKeyEvent({}, false);
@@ -165,10 +165,12 @@ abstract class CharacterAnimation extends SpriteAnimationComponent
     resetPosition();
   }
 
-  void jump() {
+  void jump({required bool sendEvent}) {
     if( !onGround ) return;
     final playerMovementController = ref.read(providerPlayerMovement.notifier);
-    playerMovementController.sendMove(PlayerMovementAction.jump, position.x, position.y);
+    if(sendEvent) {
+      playerMovementController.sendMove(PlayerMovementAction.jump, position.x, position.y);
+    }
     if( characterType == 'fireboy' ) {
       AudioManager.playSound(AudioType.fireboyJump);
     } else {
