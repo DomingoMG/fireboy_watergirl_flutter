@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
+import 'package:fireboy_and_watergirl/main.dart';
 import 'package:fireboy_and_watergirl/providers/socket_provider.dart';
 import 'package:fireboy_and_watergirl/overlays/lobby_menu.dart';
 import 'package:fireboy_and_watergirl/overlays/widgets/button_widget.dart';
-import 'package:fireboy_and_watergirl/fireboy_and_watergirl_game.dart';
 import 'package:fireboy_and_watergirl/config/audio/audio_manager.dart';
 
 class MainMenuOverlay extends ConsumerStatefulWidget {
-  final FireBoyAndWaterGirlGame game;
   static const String pathRoute = '/main-menu';
 
-  const MainMenuOverlay({super.key, required this.game});
+  const MainMenuOverlay({super.key});
 
   @override
   ConsumerState<MainMenuOverlay> createState() => _MainMenuState();
@@ -33,7 +32,7 @@ class _MainMenuState extends ConsumerState<MainMenuOverlay> {
 
   @override
   Widget build(BuildContext context) {
-    final overlays = widget.game.overlays;
+    final overlays = gameInstance.overlays;
     return Scaffold(
       backgroundColor: Colors.black,
       body: Container(
@@ -113,7 +112,7 @@ class _MainMenuState extends ConsumerState<MainMenuOverlay> {
                             onPressed: () {
                               AudioManager.stopPlayIntroMusic();
                               overlays.remove(MainMenuOverlay.pathRoute);
-                              widget.game.startGame();
+                              gameInstance.startGame();
                             },
                           ),
                           const Gap(20),
