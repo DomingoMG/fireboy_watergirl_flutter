@@ -36,26 +36,115 @@ class WaitingPlayerOverlay extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: Colors.black,
-      body: Consumer(
-        builder: (context, ref, child) {
-          return ref.watch(providerGameStart).when(
-            data: ( gameStart ) {
-              return AnimatedSwitcher(
-                duration: const Duration(milliseconds: 500),
-                child: gameStart.players.length == 2 
-                  ? const VersusScreen() 
-                  : const WaitingVersusScreen(),
-              );
-            },
-            error: (error, stackTrace) => Text('Unexpected error: $error'),
-            loading: () => const Center(child: CircularProgressIndicator())
-          );
-        },
+      body: SafeArea(
+        child: Consumer(
+          builder: (context, ref, child) {
+            return ref.watch(providerGameStart).when(
+              data: ( gameStart ) {
+                return AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 500),
+                  child: gameStart.players.length == 2 
+                    ? const VersusScreen() 
+                    : const WaitingVersusScreen(),
+                );
+              },
+              error: (error, stackTrace) => const LobbyClosedScreen(),
+              loading: () => const Center(child: CircularProgressIndicator())
+            );
+          },
+        ),
       ),
     );
   }
 }
 
+class LobbyClosedScreen extends ConsumerWidget {
+  const LobbyClosedScreen({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: Center(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 32),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // 🚨 Animación de Advertencia
+                TweenAnimationBuilder<double>(
+                  tween: Tween(begin: 0.0, end: 1.0),
+                  duration: const Duration(seconds: 1),
+                  builder: (context, value, child) => Opacity(
+                    opacity: value,
+                    child: Transform.scale(
+                      scale: value,
+                      child: const Icon(
+                        Icons.cloud_off_sharp,
+                        size: 100,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+                const Gap(24),
+          
+                // ❌ Texto de Advertencia
+                const Text(
+                  "The lobby has been closed!",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    fontFamily: 'custom_font',
+                  ),
+                ),
+                const Gap(16),
+          
+                // 💬 Explicación breve
+                const Text(
+                  "The host has closed the lobby. Please go back and find another match.",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.white60,
+                  ),
+                ),
+                const Gap(32)
+              ],
+            ),
+          ),
+        ),
+      ),
+      persistentFooterButtons: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red.shade900,
+                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              onPressed: () {
+                gameInstance.overlays.remove(WaitingPlayerOverlay.pathRoute);
+                gameInstance.overlays.add(LobbyMenuOverlay.pathRoute);
+              },
+              child: const Text(
+                "Find a new match",
+                style: TextStyle(fontSize: 18, color: Colors.white),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
 
 class WaitingVersusScreen extends ConsumerWidget {
   const WaitingVersusScreen({super.key});
@@ -185,8 +274,8 @@ class _VersusScreenState extends ConsumerState<VersusScreen> {
       _timer?.cancel();
       timer.cancel();
       _timer = null;
-      // gameInstance.overlays.remove(WaitingPlayerOverlay.pathRoute);
-      // gameInstance.startGame();
+      gameInstance.overlays.remove(WaitingPlayerOverlay.pathRoute);
+      gameInstance.startGame();
       return;
     }
     AudioManager.playSound(AudioType.buttonClick);
