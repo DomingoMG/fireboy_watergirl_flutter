@@ -2,18 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
+import 'package:fireboy_and_watergirl/main.dart';
 import 'package:fireboy_and_watergirl/config/sockets/models/game_model.dart';
 import 'package:fireboy_and_watergirl/overlays/lobby_menu.dart';
 import 'package:fireboy_and_watergirl/providers/socket_provider.dart';
-import 'package:fireboy_and_watergirl/fireboy_and_watergirl_game.dart';
 import 'package:fireboy_and_watergirl/providers/game_provider.dart';
 
-class WaitingPlayerOverlay extends ConsumerWidget { 
-  final FireBoyAndWaterGirlGame game;
-
+class WaitingPlayerOverlay extends ConsumerWidget {
   const WaitingPlayerOverlay({
-    super.key,
-    required this.game,
+    super.key
   });
 
   static const String pathRoute = '/waiting-player';
@@ -24,8 +21,9 @@ class WaitingPlayerOverlay extends ConsumerWidget {
       final gameStart = next.value;
       if( gameStart is GameStartModel ){
         if( gameStart.isGameStarted ) {
-          game.overlays.remove(WaitingPlayerOverlay.pathRoute);
-          game.startGame();
+          debugPrint('Start Game Here');   
+          // gameInstance.overlays.remove(WaitingPlayerOverlay.pathRoute);
+          // gameInstance.startGame();
         }
       }
     });
@@ -114,8 +112,8 @@ class WaitingPlayerOverlay extends ConsumerWidget {
                                 'playerId': gameStart.players.first.id
                               });
                             }
-                            game.overlays.remove(WaitingPlayerOverlay.pathRoute);
-                            game.overlays.add(LobbyMenuOverlay.pathRoute);
+                            gameInstance.overlays.remove(WaitingPlayerOverlay.pathRoute);
+                            gameInstance.overlays.add(LobbyMenuOverlay.pathRoute);
                           },
                           icon: const Icon(Icons.exit_to_app, color: Colors.white),
                           label: const Text(
