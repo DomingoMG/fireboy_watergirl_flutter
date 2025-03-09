@@ -20,7 +20,7 @@ class JumpButton extends PositionComponent with TapCallbacks, HasGameReference<F
 
   @override
   void onTapDown(TapDownEvent event) {
-    player.jump();
+    player.jump(sendEvent: true);
     super.onTapDown(event);
   }
 }
