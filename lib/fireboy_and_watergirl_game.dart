@@ -3,6 +3,7 @@ import 'package:flame/camera.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
+import 'package:flame_riverpod/flame_riverpod.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -14,7 +15,7 @@ import 'package:fireboy_and_watergirl/backgrounds/background.dart';
 import 'package:fireboy_and_watergirl/config/audio/audio_manager.dart';
 
 
-class FireBoyAndWaterGirlGame extends FlameGame with KeyboardEvents, HasCollisionDetection {
+class FireBoyAndWaterGirlGame extends FlameGame with RiverpodGameMixin, KeyboardEvents, HasCollisionDetection {
   
   late JoystickComponent joystick;  
   late JumpButton jumpButton;
@@ -29,6 +30,7 @@ class FireBoyAndWaterGirlGame extends FlameGame with KeyboardEvents, HasCollisio
 
   @override
   Future<void> onLoad() async {
+    super.onLoad();
   }
 
   Future<void> startGame() async {
@@ -83,9 +85,7 @@ class FireBoyAndWaterGirlGame extends FlameGame with KeyboardEvents, HasCollisio
   @override
   void update(double dt) {
     super.update(dt);
-
     // AudioManager.stopMusicLevel();
-
     if( level == null ) return;
 
     if( level is LevelOneSprite ) {
