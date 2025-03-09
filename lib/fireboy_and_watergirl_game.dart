@@ -123,8 +123,12 @@ class FireBoyAndWaterGirlGame extends FlameGame with RiverpodGameMixin, Keyboard
 
   @override
   KeyEventResult onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
-    fireBoy?.onKeyEvent(event, keysPressed);
-    waterGirl?.onKeyEvent(event, keysPressed);
+    final player = ref.read(providerPlayer);
+    if( player.character == 'fireboy' ) {
+      fireBoy?.onKeyEvent(event, keysPressed);
+    } else {
+      waterGirl?.onKeyEvent(event, keysPressed);
+    }
     return super.onKeyEvent(event, keysPressed);
   }
 
