@@ -67,10 +67,7 @@ class _LobbyMenuState extends ConsumerState<LobbyMenuOverlay> {
                 elevation: 0,
                 pinned: true
               ),
-              SliverFillRemaining(
-                hasScrollBody: false,
-                child: LobbyBuilders(game: widget.game)
-              )
+              LobbyBuilders(game: widget.game)
             ],
           ),
         ),
