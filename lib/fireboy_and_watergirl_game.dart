@@ -94,7 +94,9 @@ class FireBoyAndWaterGirlGame extends FlameGame with RiverpodGameMixin, Keyboard
       ),
       margin: const EdgeInsets.only(left: 20, bottom: 20),
     );
-    jumpButton = JumpButton(fireBoy!);  
+    final player = ref.read(providerPlayer);
+    final character = player.character == 'fireboy' ? fireBoy! : waterGirl!;
+    jumpButton = JumpButton(character);    
     camera.viewport.add(joystick);
     camera.viewport.add(jumpButton);
   }
