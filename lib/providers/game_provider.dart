@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fireboy_and_watergirl/providers/socket_provider.dart';
 import 'package:fireboy_and_watergirl/config/sockets/models/game_model.dart';
@@ -9,9 +10,10 @@ class GameNotifier extends AsyncNotifier<GameStartModel> {
   Future<GameStartModel> build() {
     final socketRepository = ref.read(providerSocketRepository);
     socketRepository.on('gameStart', (gameJson) {
+      debugPrint('GameStart: $gameJson');
       state = const AsyncLoading();
       if( gameJson is! Map<String, dynamic> ) return;
-      state = AsyncData(GameStartModel.fromJson(gameJson));
+      state = AsyncData(GameStartModel.fromGameStartJson(gameJson));
     });
 
     ref.onDispose(() => socketRepository.off('gameStart'));
