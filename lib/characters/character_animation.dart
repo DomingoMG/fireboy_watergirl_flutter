@@ -73,16 +73,18 @@ abstract class CharacterAnimation extends SpriteAnimationComponent
 
     switch (playerMove.action) {      
       case PlayerMovementAction.moveLeft:
-        moveFromKeyEvent({ characterType == 'fireboy' ? LogicalKeyboardKey.keyA : LogicalKeyboardKey.arrowLeft });
+        final keyEventOnline = characterType == 'fireboy' ? LogicalKeyboardKey.keyA : LogicalKeyboardKey.arrowLeft;
+        moveFromKeyEvent({ keyEventOnline }, false);
         break;
       case PlayerMovementAction.moveRight:
-        moveFromKeyEvent({ characterType == 'fireboy' ? LogicalKeyboardKey.keyD : LogicalKeyboardKey.arrowRight });
+        final keyEventOnline = { characterType == 'fireboy' ? LogicalKeyboardKey.keyD : LogicalKeyboardKey.arrowRight };
+        moveFromKeyEvent(keyEventOnline, false);
         break;
       case PlayerMovementAction.jump:
         jump();
         break;
       default:
-        moveFromKeyEvent({});
+        moveFromKeyEvent({}, false);
         velocity.x = 0;
     }
   }
@@ -149,13 +151,13 @@ abstract class CharacterAnimation extends SpriteAnimationComponent
     if( stopMoving ) return true;
     
     velocity.x = 0;
-    moveFromKeyEvent(keysPressed);
-    jumpFromKeyEvent(keysPressed);
+    moveFromKeyEvent(keysPressed, true);
+    jumpFromKeyEvent(keysPressed, true);
     return true;
   }
 
-  void moveFromKeyEvent(Set<LogicalKeyboardKey> keysPressed);
-  void jumpFromKeyEvent(Set<LogicalKeyboardKey> keysPressed);
+  void moveFromKeyEvent(Set<LogicalKeyboardKey> keysPressed, bool sendEvent);
+  void jumpFromKeyEvent(Set<LogicalKeyboardKey> keysPressed, bool sendEvent);
   void dead() {
     AudioManager.playSound(AudioType.death);
     resetPosition();
