@@ -10,20 +10,9 @@ class PlayerNotifier extends Notifier<PlayerModel> {
     return PlayerModel(
       id: '',
       name: 'Player 1',
-    );
-  }
-
-  void setName(String name) {
-    state = PlayerModel(
-      id: state.id,
-      name: name,
+      character: 'fireboy',
     );
   }
   
-  void setId(String id) {
-    state = PlayerModel(
-      id: id,
-      name: state.name,
-    );
-  }
+  void setId(String id) => state.id = id;
 }
