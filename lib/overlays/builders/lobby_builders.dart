@@ -11,44 +11,62 @@ class LobbyBuilders extends ConsumerWidget {
     super.key,
     required this.game,
   });
+
   final FireBoyAndWaterGirlGame game;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ref.watch(providerLobbies).when(
-      data: (lobbies) => AnimatedSwitcher(
-        duration: const Duration(milliseconds: 500),
-        child: lobbies.isEmpty ? 
-          const Text('No lobbies available', style: TextStyle(fontSize: 24, color: Colors.white))
-          : Column(
-            children: [
-              Expanded(
-                child: ListView.builder(
-                shrinkWrap: true,
-                primary: false,
-                itemCount: lobbies.length,
-                itemBuilder: (context, index) => LobbyItemWidget(
-                  lobby: lobbies[index],
-                  onTap: () {
-                    AudioManager.stopPlayIntroMusic();
-                    game.overlays.remove(LobbyMenuOverlay.pathRoute);
-                    game.startGame();
-                  },
-                )),
-              ),
-            ],
-          )
-      ), 
-      error: (error, stackTrace) => Text('Unexpected error: $error'),
-      loading: () => const Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          CircularProgressIndicator(
-            color: Colors.white,
+    final state = ref.watch(providerLobbies);
+
+    return state.when(
+      loading: () => const SliverToBoxAdapter(
+        child: Center(
+          child: Padding(
+            padding: EdgeInsets.symmetric(vertical: 20),
+            child: CircularProgressIndicator(color: Colors.white),
           ),
-        ],
+        ),
       ),
+      error: (error, stackTrace) => SliverToBoxAdapter(
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20),
+            child: Text(
+              'Unexpected error: $error',
+              style: const TextStyle(color: Colors.red, fontSize: 16),
+            ),
+          ),
+        ),
+      ),
+      data: (lobbies) {
+        if (lobbies.isEmpty) {
+          return const SliverToBoxAdapter(
+            child: Center(
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 20),
+                child: Text(
+                  'No lobbies available',
+                  style: TextStyle(fontSize: 24, color: Colors.white),
+                ),
+              ),
+            ),
+          );
+        }
+
+        return SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (context, index) => LobbyItemWidget(
+              lobby: lobbies[index],
+              onTap: () {
+                AudioManager.stopPlayIntroMusic();
+                game.overlays.remove(LobbyMenuOverlay.pathRoute);
+                game.startGame();
+              },
+            ),
+            childCount: lobbies.length,
+          ),
+        );
+      },
     );
   }
 }
