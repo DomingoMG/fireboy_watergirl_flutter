@@ -13,6 +13,7 @@ class PlayerMovementNotifier extends Notifier<PlayerMoveModel> {
   @override
   PlayerMoveModel build() {
     final socketRepository = ref.read(providerSocketRepository);
+    final gameOnline = ref.read(providerGameStart).value;
 
     socketRepository.on('updatePlayer', (updatePlayerJson) {
       final playerMove = PlayerMoveModel.fromJson(updatePlayerJson);
@@ -23,7 +24,7 @@ class PlayerMovementNotifier extends Notifier<PlayerMoveModel> {
       state = state.copyWith(
         character: playerMove.character,
         playerId: playerMove.playerId,
-        lobbyId: playerMove.lobbyId,
+        lobbyId: gameOnline?.lobbyId ?? '',
         action: playerMove.action,
         position: playerMove.position,
       );
@@ -47,14 +48,14 @@ class PlayerMovementNotifier extends Notifier<PlayerMoveModel> {
     final player = ref.read(providerPlayer);
     final movement = PlayerMoveModel(
       character: player.character ?? state.character,
-      playerId: state.playerId,
-      lobbyId: state.lobbyId,
+      playerId: player.id,
+      lobbyId: gameStart.lobbyId,
       action: action,
       position: PlayerPositionModel(x: x, y: y),
     );
 
     socketRepository.emit('playerMove', movement.toJson());
 
-    debugPrint("🎮 Enviando movimiento: ${movement.action.name} en ($x, $y)");
+    debugPrint("🎮 Enviando movimiento: ${movement.toJson()}");
   }
 }
