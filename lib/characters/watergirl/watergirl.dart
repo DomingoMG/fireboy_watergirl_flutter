@@ -1,7 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flutter/services.dart' show LogicalKeyboardKey;
 import 'package:fireboy_and_watergirl/characters/character_animation.dart';
-import 'package:fireboy_and_watergirl/config/config.dart';
 
 class WaterGirlAnimation extends CharacterAnimation {
   WaterGirlAnimation() : super(
@@ -16,14 +15,6 @@ class WaterGirlAnimation extends CharacterAnimation {
     if (keysPressed.contains(LogicalKeyboardKey.arrowUp) && onGround) {
       jump();
     }
-  }
-
-  void jump() {
-    AudioManager.playSound(AudioType.waterGirlJump);
-    animation = jumpAnimation;
-    velocity.y = jumpPower;
-    isJumping = true;
-    onGround = false;
   }
 
   @override
