@@ -26,7 +26,7 @@ class LobbyNotifier extends AsyncNotifier<List<LobbyModel>> {
       final gameStartController = ref.read(providerGameStart.notifier);
       if( data is! Map<String, dynamic> ) return;
       debugPrint('✅ Nuevo juego creado: $data');
-      gameStartController.createLobby(GameStartModel.fromJson(data));
+      gameStartController.createLobby(GameStartModel.fromLobbyCreatedJson(data));
     });
 
     ref.onDispose(() => _onFindLobbiesDispose());
