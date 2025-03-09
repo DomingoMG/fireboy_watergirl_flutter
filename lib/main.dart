@@ -16,9 +16,9 @@ void main() {
         key: gameWidgetKey,
         game: gameInstance,
         overlayBuilderMap: {
-          MainMenuOverlay.pathRoute: (context, game) => MainMenuOverlay(game: game as FireBoyAndWaterGirlGame),
-          LobbyMenuOverlay.pathRoute: (context, game) => LobbyMenuOverlay(game: game as FireBoyAndWaterGirlGame),
-          WaitingPlayerOverlay.pathRoute: (context, game) => WaitingPlayerOverlay(game: game as FireBoyAndWaterGirlGame),
+          MainMenuOverlay.pathRoute: (context, game) => const MainMenuOverlay(),
+          LobbyMenuOverlay.pathRoute: (context, game) => const LobbyMenuOverlay(),
+          WaitingPlayerOverlay.pathRoute: (context, game) => const WaitingPlayerOverlay(),
         },
         initialActiveOverlays: const [MainMenuOverlay.pathRoute],
       ),
