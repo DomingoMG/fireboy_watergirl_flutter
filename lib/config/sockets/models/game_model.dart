@@ -19,6 +19,17 @@ class GameStartModel {
     );
   }
 
+  GameStartModel copyWith({
+    String? lobbyId,
+    List<PlayerModel>? players,
+    bool? isGameStarted
+  }) {
+    return GameStartModel(
+      lobbyId: lobbyId ?? this.lobbyId,
+      players: players ?? this.players,
+      isGameStarted: isGameStarted ?? this.isGameStarted
+    );
+  }
 
   factory GameStartModel.fromLobbyCreatedJson(Map<String, dynamic> json) {
     return GameStartModel(
