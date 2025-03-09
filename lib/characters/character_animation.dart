@@ -129,9 +129,11 @@ abstract class CharacterAnimation extends SpriteAnimationComponent
       double threshold = 0.60; // 🔥 Requiere mover el joystick un 60% para que empiece a moverse
       double joystickIntensity = joystick!.delta.length; // Cuánto se ha movido el joystick (0 - 1)
       
-      if (joystickIntensity < threshold) {
+      if(joystickIntensity < threshold) {
+        if( animation == idleAnimation ) return;
         velocity.x = 0; // Si no se empuja lo suficiente, no se mueve
         animation = idleAnimation;
+        playerMovementController.sendMove(PlayerMovementAction.idle, position.x, position.y);
       } else {
         double normalizedSpeed = ((joystickIntensity - threshold) / (1 - threshold)).clamp(0.0, 1.0); 
         velocity.x = joystick!.delta.x.sign * speed * normalizedSpeed; // Aplicar velocidad solo cuando pasa el umbral
