@@ -16,7 +16,7 @@ class WaterGirlAnimation extends CharacterAnimation {
   void jumpFromKeyEvent(Set<LogicalKeyboardKey> keysPressed, bool sendEvent) {
     final playerMovementController = ref.read(providerPlayerMovement.notifier);
     if (keysPressed.contains(LogicalKeyboardKey.arrowUp) && onGround) {
-      jump();
+      jump(sendEvent: true);
       if( !sendEvent ) return;
       playerMovementController.sendMove(PlayerMovementAction.jump, position.x, position.y);
     }
