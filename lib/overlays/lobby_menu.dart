@@ -35,47 +35,50 @@ class _LobbyMenuState extends ConsumerState<LobbyMenuOverlay> {
       backgroundColor: Colors.black,
       body: SafeArea(
         minimum: const EdgeInsets.symmetric(horizontal: 26, vertical: 16),
-        child: RefreshIndicator.adaptive(
-          onRefresh: () async {
-            AudioManager.playSound(AudioType.buttonClick);
-            await Future.delayed(const Duration(seconds: 1));
-            lobbyController.findLobbies();
-          },
-          child: CustomScrollView(
-            slivers: [
-              SliverAppBar(
-                leading: IconButton(
-                  icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
-                  onPressed: () {
-                    AudioManager.playSound(AudioType.buttonClick);
-                    widget.game.overlays.remove(LobbyMenuOverlay.pathRoute);
-                    widget.game.overlays.add(MainMenuOverlay.pathRoute);
-                  }
-                ),
-                title: const Text('Lobbies available', 
-                  style: TextStyle(
-                    color: Colors.white, 
-                    fontWeight: FontWeight.bold,
-                    fontSize: 24,
-                    fontFamily: 'custom_font',
-                  ),
-                ),
-                backgroundColor: Colors.black,
-                elevation: 0,
-                pinned: true,
-                actions: [
-                  IconButton(
-                    icon: const Icon(Icons.refresh, color: Colors.white),
-                    onPressed: () async {
-                      AudioManager.playSound(AudioType.buttonClick);
-                      lobbyController.findLobbies();
-                    },
-                  )
-                ],
+        child: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
+                onPressed: () {
+                  AudioManager.playSound(AudioType.buttonClick);
+                  widget.game.overlays.remove(LobbyMenuOverlay.pathRoute);
+                  widget.game.overlays.add(MainMenuOverlay.pathRoute);
+                }
               ),
-              SliverFillRemaining(child: LobbyBuilders(game: widget.game))
-            ],
-          ),
+              title: const Text('Lobbies available', 
+                style: TextStyle(
+                  color: Colors.white, 
+                  fontWeight: FontWeight.bold,
+                  fontSize: 24,
+                  fontFamily: 'custom_font',
+                ),
+              ),
+              backgroundColor: Colors.black,
+              elevation: 0,
+              pinned: true,
+              actions: [
+                IconButton(
+                  icon: const Icon(Icons.refresh, color: Colors.white),
+                  onPressed: () async {
+                    AudioManager.playSound(AudioType.buttonClick);
+                    lobbyController.findLobbies();
+                  },
+                )
+              ],
+            ),
+            SliverFillRemaining(child: 
+              RefreshIndicator(
+                color: Colors.white,
+                onRefresh: () async {
+                  AudioManager.playSound(AudioType.buttonClick);
+                  await Future.delayed(const Duration(seconds: 1));
+                  lobbyController.findLobbies();
+                },
+                child: LobbyBuilders(game: widget.game)
+              )
+            )
+          ],
         ),
       ),
       floatingActionButton: Wrap(
