@@ -1,7 +1,7 @@
+import 'package:fireboy_and_watergirl/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fireboy_and_watergirl/overlays/waiting_player.dart';
-import 'package:fireboy_and_watergirl/fireboy_and_watergirl_game.dart';
 import 'package:fireboy_and_watergirl/overlays/builders/lobby_builders.dart';
 import 'package:fireboy_and_watergirl/providers/lobby_provider.dart';
 import 'package:fireboy_and_watergirl/overlays/main_menu.dart';
@@ -10,10 +10,8 @@ import 'package:fireboy_and_watergirl/config/audio/audio_manager.dart';
 
 class LobbyMenuOverlay extends ConsumerStatefulWidget {
   const LobbyMenuOverlay({
-    super.key,
-    required this.game,
+    super.key
   });
-  final FireBoyAndWaterGirlGame game;
   static const String pathRoute = '/lobby-menu';
 
   @override
@@ -51,8 +49,8 @@ class _LobbyMenuState extends ConsumerState<LobbyMenuOverlay> {
                   icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
                   onPressed: () {
                     AudioManager.playSound(AudioType.buttonClick);
-                    widget.game.overlays.remove(LobbyMenuOverlay.pathRoute);
-                    widget.game.overlays.add(MainMenuOverlay.pathRoute);
+                    gameInstance.overlays.remove(LobbyMenuOverlay.pathRoute);
+                    gameInstance.overlays.add(MainMenuOverlay.pathRoute);
                   }
                 ),
                 title: const Text('Lobbies available', 
@@ -67,7 +65,7 @@ class _LobbyMenuState extends ConsumerState<LobbyMenuOverlay> {
                 elevation: 0,
                 pinned: true
               ),
-              LobbyBuilders(game: widget.game)
+              const LobbyBuilders()
             ],
           ),
         ),
@@ -91,8 +89,8 @@ class _LobbyMenuState extends ConsumerState<LobbyMenuOverlay> {
             onPressed: () {
               AudioManager.playSound(AudioType.buttonClick);
               lobbyController.createLobby();
-              widget.game.overlays.remove(LobbyMenuOverlay.pathRoute);
-              widget.game.overlays.add(WaitingPlayerOverlay.pathRoute);
+              gameInstance.overlays.remove(LobbyMenuOverlay.pathRoute);
+              gameInstance.overlays.add(WaitingPlayerOverlay.pathRoute);
             },
           )
         ],
