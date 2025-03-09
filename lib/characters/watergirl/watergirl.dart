@@ -13,27 +13,31 @@ class WaterGirlAnimation extends CharacterAnimation {
   );
 
   @override
-  void jumpFromKeyEvent(Set<LogicalKeyboardKey> keysPressed) {
+  void jumpFromKeyEvent(Set<LogicalKeyboardKey> keysPressed, bool sendEvent) {
     final playerMovementController = ref.read(providerPlayerMovement.notifier);
     if (keysPressed.contains(LogicalKeyboardKey.arrowUp) && onGround) {
       jump();
+      if( !sendEvent ) return;
       playerMovementController.sendMove(PlayerMovementAction.jump, position.x, position.y);
     }
   }
 
   @override
-  void moveFromKeyEvent(Set<LogicalKeyboardKey> keysPressed) {
+  void moveFromKeyEvent(Set<LogicalKeyboardKey> keysPressed, bool sendEvent) {
     final playerMovementController = ref.read(providerPlayerMovement.notifier);
     if (keysPressed.contains(LogicalKeyboardKey.arrowLeft)) {
       animation = walkLeftAnimation;
       velocity.x = -speed;
+      if( !sendEvent ) return;
       playerMovementController.sendMove(PlayerMovementAction.moveLeft, position.x, position.y);
     } else if (keysPressed.contains(LogicalKeyboardKey.arrowRight)) {
       animation = walkRightAnimation;
       velocity.x = speed;
+      if( !sendEvent ) return;
       playerMovementController.sendMove(PlayerMovementAction.moveRight, position.x, position.y);
     } else {
       animation = idleAnimation;
+      if( !sendEvent ) return;
       playerMovementController.sendMove(PlayerMovementAction.idle, position.x, position.y);
     }
   }
