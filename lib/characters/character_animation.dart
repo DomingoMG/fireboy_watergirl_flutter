@@ -1,11 +1,17 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame_riverpod/flame_riverpod.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show KeyEvent, LogicalKeyboardKey;
+import 'package:fireboy_and_watergirl/config/sockets/models/player_movement.dart';
+import 'package:fireboy_and_watergirl/providers/game_provider.dart';
+import 'package:fireboy_and_watergirl/providers/movement_provider.dart';
+import 'package:fireboy_and_watergirl/providers/player_provider.dart';
 import 'package:fireboy_and_watergirl/config/config.dart';
 import 'package:fireboy_and_watergirl/fireboy_and_watergirl_game.dart';
 
 abstract class CharacterAnimation extends SpriteAnimationComponent
-    with HasGameReference<FireBoyAndWaterGirlGame>, KeyboardHandler, CollisionCallbacks {
+    with RiverpodComponentMixin, HasGameReference<FireBoyAndWaterGirlGame>, KeyboardHandler, CollisionCallbacks {
   CharacterAnimation({
     required this.characterType,
     required Vector2 size,
@@ -35,6 +41,51 @@ abstract class CharacterAnimation extends SpriteAnimationComponent
   bool isJumping = false;
   bool onGround = false;
   bool stopMoving = false;
+
+  @override
+  void onMount() {
+    addToGameWidgetBuild((){
+      final gameStart = ref.read(providerGameStart).value;
+      if( gameStart == null ) return;
+      ref.listen(providerPlayerMovement, ( previous, next ) {
+        _playerOnlineMovement(next);
+      });
+    });
+    super.onMount();
+  }
+
+
+  void _playerOnlineMovement(PlayerMoveModel playerMove) {
+    final player = ref.read(providerPlayer);
+    final gameStart = ref.read(providerGameStart).value;
+
+    if (gameStart == null) return;
+
+    // 📌 Solo actualizar si el personaje en el evento es el correcto
+    debugPrint('✅ Personaje en el evento: ${playerMove.character}');
+    if (playerMove.character != characterType) return;
+
+    // 📌 Ignorar si el evento es del propio jugador
+    if (playerMove.playerId == player.id) return;
+
+    // 🔥 Actualizar solo el otro jugador
+    position.setValues(playerMove.position.x, playerMove.position.y);
+
+    switch (playerMove.action) {      
+      case PlayerMovementAction.moveLeft:
+        moveFromKeyEvent({ characterType == 'fireboy' ? LogicalKeyboardKey.keyA : LogicalKeyboardKey.arrowLeft });
+        break;
+      case PlayerMovementAction.moveRight:
+        moveFromKeyEvent({ characterType == 'fireboy' ? LogicalKeyboardKey.keyD : LogicalKeyboardKey.arrowRight });
+        break;
+      case PlayerMovementAction.jump:
+        jump();
+        break;
+      default:
+        moveFromKeyEvent({});
+        velocity.x = 0;
+    }
+  }
 
   @override
   Future<void> onLoad() async {
@@ -71,6 +122,7 @@ abstract class CharacterAnimation extends SpriteAnimationComponent
   }
 
   void moveWithJoystick() {
+    final playerMovementController = ref.read(providerPlayerMovement.notifier);
     if (joystick != null) {
       double threshold = 0.60; // 🔥 Requiere mover el joystick un 60% para que empiece a moverse
       double joystickIntensity = joystick!.delta.length; // Cuánto se ha movido el joystick (0 - 1)
@@ -82,10 +134,13 @@ abstract class CharacterAnimation extends SpriteAnimationComponent
         double normalizedSpeed = ((joystickIntensity - threshold) / (1 - threshold)).clamp(0.0, 1.0); 
         velocity.x = joystick!.delta.x.sign * speed * normalizedSpeed; // Aplicar velocidad solo cuando pasa el umbral
         animation = joystick!.delta.x < 0 ? walkLeftAnimation : walkRightAnimation;
+        final playerMovementAction = joystick!.delta.x < 0 ? PlayerMovementAction.moveLeft : PlayerMovementAction.moveRight;
+        playerMovementController.sendMove(playerMovementAction, position.x, position.y);
       }
     } else {
       velocity.x = 0;
       animation = idleAnimation;
+      playerMovementController.sendMove(PlayerMovementAction.idle, position.x, position.y);
     }
   }
 
@@ -104,6 +159,21 @@ abstract class CharacterAnimation extends SpriteAnimationComponent
   void dead() {
     AudioManager.playSound(AudioType.death);
     resetPosition();
+  }
+
+  void jump() {
+    if( !onGround ) return;
+    final playerMovementController = ref.read(providerPlayerMovement.notifier);
+    playerMovementController.sendMove(PlayerMovementAction.jump, position.x, position.y);
+    if( characterType == 'fireboy' ) {
+      AudioManager.playSound(AudioType.fireboyJump);
+    } else {
+      AudioManager.playSound(AudioType.waterGirlJump);
+    }
+    animation = jumpAnimation;
+    velocity.y = jumpPower;
+    isJumping = true;
+    onGround = false;
   }
 
   void resetPosition() {
