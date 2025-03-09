@@ -35,59 +35,62 @@ class _LobbyMenuState extends ConsumerState<LobbyMenuOverlay> {
       backgroundColor: Colors.black,
       body: SafeArea(
         minimum: const EdgeInsets.symmetric(horizontal: 26, vertical: 16),
-        child: CustomScrollView(
-          slivers: [
-            SliverAppBar(
-              leading: IconButton(
-                icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
-                onPressed: () {
-                  AudioManager.playSound(AudioType.buttonClick);
-                  widget.game.overlays.remove(LobbyMenuOverlay.pathRoute);
-                  widget.game.overlays.add(MainMenuOverlay.pathRoute);
-                }
-              ),
-              title: const Text('Lobbies available', 
-                style: TextStyle(
-                  color: Colors.white, 
-                  fontWeight: FontWeight.bold,
-                  fontSize: 24,
-                  fontFamily: 'custom_font',
-                ),
-              ),
-              backgroundColor: Colors.black,
-              elevation: 0,
-              pinned: true,
-              actions: [
-                IconButton(
-                  icon: const Icon(Icons.refresh, color: Colors.white),
-                  onPressed: () async {
+        child: RefreshIndicator.adaptive(
+          edgeOffset: 60,
+          triggerMode: RefreshIndicatorTriggerMode.onEdge,
+          color: Colors.white,
+          onRefresh: () async {
+            AudioManager.playSound(AudioType.buttonClick);
+            await Future.delayed(const Duration(seconds: 1));
+            lobbyController.findLobbies();
+          },
+          child: CustomScrollView(
+            slivers: [
+              SliverAppBar(
+                leading: IconButton(
+                  icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
+                  onPressed: () {
                     AudioManager.playSound(AudioType.buttonClick);
-                    lobbyController.findLobbies();
-                  },
-                )
-              ],
-            ),
-            SliverFillRemaining(child: 
-              RefreshIndicator(
-                color: Colors.white,
-                onRefresh: () async {
-                  AudioManager.playSound(AudioType.buttonClick);
-                  await Future.delayed(const Duration(seconds: 1));
-                  lobbyController.findLobbies();
-                },
+                    widget.game.overlays.remove(LobbyMenuOverlay.pathRoute);
+                    widget.game.overlays.add(MainMenuOverlay.pathRoute);
+                  }
+                ),
+                title: const Text('Lobbies available', 
+                  style: TextStyle(
+                    color: Colors.white, 
+                    fontWeight: FontWeight.bold,
+                    fontSize: 24,
+                    fontFamily: 'custom_font',
+                  ),
+                ),
+                backgroundColor: Colors.black,
+                elevation: 0,
+                pinned: true
+              ),
+              SliverFillRemaining(
+                hasScrollBody: false,
                 child: LobbyBuilders(game: widget.game)
               )
-            )
-          ],
+            ],
+          ),
         ),
       ),
       floatingActionButton: Wrap(
         direction: Axis.vertical,
-        runSpacing: 4,
-        spacing: 12,
+        alignment: WrapAlignment.spaceEvenly,
+        spacing: 16,
         children: [
           FloatingActionButton.extended(
-            label: const Text('🎮 Create lobby', style: TextStyle(fontSize: 16)),
+            backgroundColor: Colors.white,
+            label: const Text('🔍 Find lobbies', style: TextStyle(fontSize: 16, color: Colors.black)),
+            onPressed: () {
+              AudioManager.playSound(AudioType.buttonClick);
+              lobbyController.findLobbies();
+            },
+          ),
+          FloatingActionButton.extended(
+            backgroundColor: Colors.red.shade900,
+            label: const Text('🎮 Create lobby', style: TextStyle(fontSize: 16, color: Colors.white)),
             onPressed: () {
               AudioManager.playSound(AudioType.buttonClick);
               lobbyController.createLobby();
@@ -100,31 +103,3 @@ class _LobbyMenuState extends ConsumerState<LobbyMenuOverlay> {
     );
   }
 }
-
-
-// ButtonWidget(
-//   text: '⟳ Refresh',
-//   fontSize: 16,
-//   backgroundColor: Colors.white,
-//   highlightColor: Colors.grey.shade500,
-//   splashColor: Colors.white.withValues(alpha: 0.3),
-//   hoverColor: Colors.grey.shade300,
-//   fontColor: Colors.black,
-//   onPressed: () async {
-//     AudioManager.playSound(AudioType.buttonClick);
-//     lobbyController.findLobbies();
-//   },
-// ),
-// const Gap(16),
-// ButtonWidget(
-//   text: '🎮 Create lobby',
-//   fontSize: 16,
-//   backgroundColor: Colors.white,
-//   highlightColor: Colors.grey.shade500,
-//   splashColor: Colors.white.withValues(alpha: 0.3),
-//   hoverColor: Colors.grey.shade300,
-//   fontColor: Colors.black,
-//   onPressed: () {
-
-//   },
-// ),
