@@ -1,11 +1,11 @@
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flutter/material.dart';
+import 'package:fireboy_and_watergirl/characters/character_animation.dart';
 import 'package:fireboy_and_watergirl/fireboy_and_watergirl_game.dart';
-import 'package:fireboy_and_watergirl/characters/fireboy/fireboy.dart';
 
 class JumpButton extends PositionComponent with TapCallbacks, HasGameReference<FireBoyAndWaterGirlGame> {
-  final FireboyAnimation player;
+  final CharacterAnimation player;
 
   JumpButton(this.player) : super(size: Vector2(70, 70));
 
