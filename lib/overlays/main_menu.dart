@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:fireboy_and_watergirl/main.dart';
+import 'package:fireboy_and_watergirl/providers/game_state_provider.dart';
 import 'package:fireboy_and_watergirl/providers/socket_provider.dart';
 import 'package:fireboy_and_watergirl/overlays/lobby_menu.dart';
 import 'package:fireboy_and_watergirl/overlays/widgets/button_widget.dart';
@@ -20,6 +21,7 @@ class _MainMenuState extends ConsumerState<MainMenuOverlay> {
   @override
   void initState() {
     ref.read(providerSocketRepository);
+    ref.read(providerGameOnlineState);
     // AudioManager.playIntroMusic();
     super.initState();
   }
