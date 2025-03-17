@@ -50,4 +50,15 @@ class LobbyNotifier extends AsyncNotifier<List<LobbyModel>> {
     final socketRepository = ref.read(providerSocketRepository);
     socketRepository.emit('createLobby', {'playerId': player.name});
   }
+
+  void deleteLobby( GameStartModel gameStart ) {
+    debugPrint('⚙️ Eliminando lobby...');
+    final socketRepository = ref.read(providerSocketRepository);
+    if( gameStart.lobbyId.isNotEmpty && gameStart.players.isNotEmpty ) {
+      socketRepository.emit('deleteLobby', {
+        'lobbyId': gameStart.lobbyId, 
+        'playerId': gameStart.players.first.id
+      });
+    }
+  }
 }
