@@ -1,7 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:fireboy_and_watergirl/providers/game_provider.dart';
-import 'package:fireboy_and_watergirl/providers/player_provider.dart';
 import 'package:flame/camera.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
@@ -11,6 +9,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fireboy_and_watergirl/misc/jump_button.dart';
+import 'package:fireboy_and_watergirl/providers/game_provider.dart';
+import 'package:fireboy_and_watergirl/providers/player_provider.dart';
 import 'package:fireboy_and_watergirl/characters/fireboy/fireboy.dart';
 import 'package:fireboy_and_watergirl/characters/watergirl/watergirl.dart';
 import 'package:fireboy_and_watergirl/scenes/level_1.dart';
