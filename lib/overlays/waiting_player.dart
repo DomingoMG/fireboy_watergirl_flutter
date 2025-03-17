@@ -5,9 +5,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:fireboy_and_watergirl/main.dart';
+import 'package:fireboy_and_watergirl/providers/lobby_provider.dart';
 import 'package:fireboy_and_watergirl/config/sockets/models/game_model.dart';
 import 'package:fireboy_and_watergirl/overlays/lobby_menu.dart';
-import 'package:fireboy_and_watergirl/providers/socket_provider.dart';
 import 'package:fireboy_and_watergirl/providers/game_provider.dart';
 import 'package:fireboy_and_watergirl/config/audio/audio_manager.dart';
 import 'package:fireboy_and_watergirl/config/enums/audio_type.dart';
@@ -223,14 +223,9 @@ class WaitingVersusScreen extends ConsumerWidget {
                   ),
                 ),
                 onPressed: () {
-                  final socketRepository = ref.read(providerSocketRepository);
-                  if(  gameStart is! GameStartModel ) return;
-                  if( gameStart.lobbyId.isNotEmpty && gameStart.players.isNotEmpty ) {
-                    socketRepository.emit('deleteLobby', {
-                      'lobbyId': gameStart.lobbyId, 
-                      'playerId': gameStart.players.first.id
-                    });
-                  }
+                  final lobbyController = ref.read(providerLobbies.notifier);
+                  if( gameStart == null ) return;
+                  lobbyController.deleteLobby(gameStart);
                   gameInstance.overlays.remove(WaitingPlayerOverlay.pathRoute);
                   gameInstance.overlays.add(LobbyMenuOverlay.pathRoute);
                 },
