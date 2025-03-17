@@ -55,7 +55,7 @@ class FireBoyAndWaterGirlGame extends FlameGame with RiverpodGameMixin, Keyboard
       
     await addAll([world, camera]);
 
-    if( Platform.isAndroid || Platform.isIOS ) {
+    if( !kIsWeb && (Platform.isAndroid || Platform.isIOS) ) {
       await _addJoystick(); 
     }
     await world.addAll([
@@ -70,12 +70,12 @@ class FireBoyAndWaterGirlGame extends FlameGame with RiverpodGameMixin, Keyboard
     if( gameOnline != null ) {
       if(player.character == 'fireboy') {
         camera.follow(fireBoy!, maxSpeed: 300);
-        if( Platform.isAndroid || Platform.isIOS ) {
+        if( !kIsWeb && (Platform.isAndroid || Platform.isIOS) ) {
           fireBoy?.joystick = joystick;
         }
       } else {
         camera.follow(waterGirl!, maxSpeed: 300);
-        if( Platform.isAndroid || Platform.isIOS ) {
+        if( !kIsWeb && (Platform.isAndroid || Platform.isIOS) ) {
           waterGirl?.joystick = joystick;
         }
       }
