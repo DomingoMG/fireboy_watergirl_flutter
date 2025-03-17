@@ -24,7 +24,8 @@ class GameNotifier extends AsyncNotifier<GameStartModel> {
     socketRepository.on('playerLeft', ( playerLeftJson ) {
       debugPrint('✅ Jugador ${playerLeftJson['playerId']} ha abandonado el juego');
       final gameStart = state.value?.copyWith(
-        players: state.value?.players.where((player) => player.name != playerLeftJson['playerId']).toList() ?? []
+        players: state.value?.players.where((player) => player.name != playerLeftJson['playerId']).toList() ?? [],
+        isGameStarted: false
       );
       state = const AsyncLoading();
       if( gameStart is! GameStartModel ) return;
