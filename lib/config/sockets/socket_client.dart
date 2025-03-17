@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
 
 class SocketClientRepository {
-  static const String host = 'http://192.168.1.12:3000';
+  static const String host = 'https://airproradio.com';
   
   // Singleton
   static final SocketClientRepository _instance = SocketClientRepository._internal();
