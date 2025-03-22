@@ -93,7 +93,11 @@ abstract class CharacterAnimation extends SpriteAnimationComponent
   Future<void> onLoad() async {
     idleAnimation = await game.loadSpriteAnimation(
       'characters/${characterType}_idle.png',
-      SpriteAnimationData.sequenced(amount: characterType == 'fireboy' ? 5 : 11, stepTime: .1, textureSize: Vector2(128, 128)),
+      SpriteAnimationData.sequenced(
+        amount: characterType == 'fireboy' ? 5 : 11, 
+        stepTime: .1, 
+        textureSize: Vector2(128, 128)
+      ),
     );
     walkRightAnimation = await game.loadSpriteAnimation(
       'characters/${characterType}_walk_right.png',
@@ -105,7 +109,10 @@ abstract class CharacterAnimation extends SpriteAnimationComponent
     );
     jumpAnimation = await game.loadSpriteAnimation(
       'characters/${characterType}_jump.png',
-      SpriteAnimationData.sequenced(amount: 8, stepTime: .1, textureSize: Vector2(128, 128)),
+      SpriteAnimationData.sequenced(
+        amount: characterType == 'fireboy' ? 8 : 11, 
+        stepTime: .1, 
+        textureSize: Vector2(128, 128)),
     );
     animation = idleAnimation;
 
