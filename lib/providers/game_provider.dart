@@ -46,6 +46,15 @@ class GameNotifier extends AsyncNotifier<GameStartModel> {
     ));
   }
 
+  void startOfflineGame() {
+    state = AsyncData(GameStartModel(
+      lobbyId: '', 
+      players: [],
+      isGameStarted: true,
+      isOnline: false
+    ));
+  }
+
   void createLobby( GameStartModel gameStart ) {
     state = const AsyncLoading();
     state = AsyncData(gameStart);
