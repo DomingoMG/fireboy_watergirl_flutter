@@ -1,13 +1,14 @@
+import 'package:flutter/widgets.dart' show Curves;
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/flame.dart';
 import 'package:fireboy_and_watergirl/misc/misc.dart';
+import 'package:fireboy_and_watergirl/overlays/main_menu.dart';
 import 'package:fireboy_and_watergirl/config/audio/audio_manager.dart';
 import 'package:fireboy_and_watergirl/fireboy_and_watergirl_game.dart';
 import 'package:fireboy_and_watergirl/config/enums/audio_type.dart';
 import 'package:fireboy_and_watergirl/misc/diamond_hitbox.dart';
 import 'package:fireboy_and_watergirl/misc/door_hitbox.dart';
-import 'package:flutter/widgets.dart' show Curves;
 
 class LevelOneSprite extends SpriteComponent with HasGameReference<FireBoyAndWaterGirlGame> {
 
@@ -325,6 +326,12 @@ class LevelOneSprite extends SpriteComponent with HasGameReference<FireBoyAndWat
         ScaleEffect.to(
           Vector2(4.5, 4.5), // Zoom x4.5
           EffectController(duration: 4, curve: Curves.easeOut),
+          onComplete: () async {
+            await Future.delayed(const Duration(seconds: 2));
+            game.overlays.add(MainMenuOverlay.pathRoute);
+            game.fireBoy?.resetPosition();
+            game.waterGirl?.resetPosition();
+          }
         ),
       );
     }
