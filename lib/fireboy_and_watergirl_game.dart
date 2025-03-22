@@ -39,8 +39,7 @@ class FireBoyAndWaterGirlGame extends FlameGame with RiverpodGameMixin, Keyboard
 
   Future<void> startGame() async {
     debugMode = kDebugMode;
-    await AudioManager.init();
-    // AudioManager.playMusicLevel();
+    AudioManager.playMusicLevel();
     final gameOnline = ref.read(providerGameStart).asData?.value;
     final player = ref.read(providerPlayer);
     final world = FireboyAndWaterGirlWorld();
