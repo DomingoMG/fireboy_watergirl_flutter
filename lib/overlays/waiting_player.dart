@@ -105,7 +105,7 @@ class LobbyClosedScreen extends ConsumerWidget {
           
                 // 💬 Explicación breve
                 const Text(
-                  "The host has closed the lobby. Please go back and find another match.",
+                  "The player left the game, re-create a new room.",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 18,
