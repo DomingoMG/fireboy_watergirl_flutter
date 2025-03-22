@@ -23,13 +23,13 @@ class _MainMenuState extends ConsumerState<MainMenuOverlay> {
   void initState() {
     ref.read(providerSocketRepository);
     ref.read(providerGameOnlineState);
-    // AudioManager.playIntroMusic();
+    AudioManager.playIntroMusic();
     super.initState();
   }
 
   @override
   void dispose() {
-    // AudioManager.stopPlayIntroMusic();
+    AudioManager.stopPlayIntroMusic();
     super.dispose();
   }
 
