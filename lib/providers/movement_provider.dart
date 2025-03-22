@@ -42,14 +42,14 @@ class PlayerMovementNotifier extends Notifier<PlayerMoveModel> {
   // ✅ Método para enviar movimiento al servidor
   void sendMove(PlayerMovementAction action, double x, double y) {
     final gameStart = ref.read(providerGameStart).value;
-    if( gameStart?.players == null || gameStart!.players.isEmpty ) return;
+    if( gameStart?.isOnline == false) return;
     
     final socketRepository = ref.read(providerSocketRepository);
     final player = ref.read(providerPlayer);
     final movement = PlayerMoveModel(
       character: player.character ?? state.character,
       playerId: player.id,
-      lobbyId: gameStart.lobbyId,
+      lobbyId: gameStart!.lobbyId,
       action: action,
       position: PlayerPositionModel(x: x, y: y),
     );
