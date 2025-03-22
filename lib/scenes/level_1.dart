@@ -117,8 +117,8 @@ class LevelOneSprite extends SpriteComponent with HasGameReference<FireBoyAndWat
       size: Vector2(261.82, 20)
     ),
     FloorHitbox(
-      position: Vector2(923.31, 298.24),
-      size: Vector2(189.5, 20.74)
+      position: Vector2(850.024, 298.24),
+      size: Vector2(262.78, 22.68)
     ),
     DiagonalFloorHitbox(
       diagonalLeftStart: false,
