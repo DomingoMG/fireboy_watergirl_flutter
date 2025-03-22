@@ -46,7 +46,7 @@ abstract class CharacterAnimation extends SpriteAnimationComponent
   void onMount() {
     addToGameWidgetBuild((){
       final gameStart = ref.read(providerGameStart).value;
-      if( gameStart == null ) return;
+      if( gameStart?.isOnline == false ) return;
       ref.listen(providerPlayerMovement, ( previous, next ) {
         _playerOnlineMovement(next);
       });
@@ -59,7 +59,7 @@ abstract class CharacterAnimation extends SpriteAnimationComponent
     final player = ref.read(providerPlayer);
     final gameStart = ref.read(providerGameStart).value;
 
-    if (gameStart == null) return;
+    if (gameStart?.isOnline == false) return;
 
     // 📌 Solo actualizar si el personaje en el evento es el correcto
     debugPrint('✅ Personaje en el evento: ${playerMove.character}');
