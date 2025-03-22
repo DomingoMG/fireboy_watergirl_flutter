@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:io';
+import 'package:fireboy_and_watergirl/config/utils/check_devices.dart';
 import 'package:flame/camera.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
@@ -55,7 +55,7 @@ class FireBoyAndWaterGirlGame extends FlameGame with RiverpodGameMixin, Keyboard
       
     await addAll([world, camera]);
 
-    if( !kIsWeb && (Platform.isAndroid || Platform.isIOS) ) {
+    if( CheckDevices.isMobile ) {
       await _addJoystick(); 
     }
     await world.addAll([
@@ -70,12 +70,12 @@ class FireBoyAndWaterGirlGame extends FlameGame with RiverpodGameMixin, Keyboard
     if( gameOnline != null ) {
       if(player.character == 'fireboy') {
         camera.follow(fireBoy!, maxSpeed: 300);
-        if( !kIsWeb && (Platform.isAndroid || Platform.isIOS) ) {
+        if( CheckDevices.isMobile ) {
           fireBoy?.joystick = joystick;
         }
       } else {
         camera.follow(waterGirl!, maxSpeed: 300);
-        if( !kIsWeb && (Platform.isAndroid || Platform.isIOS) ) {
+        if( CheckDevices.isMobile ) {
           waterGirl?.joystick = joystick;
         }
       }
