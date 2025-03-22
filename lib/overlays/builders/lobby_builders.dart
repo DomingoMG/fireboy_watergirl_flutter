@@ -63,7 +63,7 @@ class LobbyBuilders extends ConsumerWidget {
                 AudioManager.stopPlayIntroMusic();
                 gameInstance.overlays.remove(LobbyMenuOverlay.pathRoute);
                 gameInstance.overlays.add(WaitingPlayerOverlay.pathRoute);
-                socketRepository.emit('joinSpecificLobby', {'lobbyId': lobbies[index].lobbyId, 'playerId': 'Yekale'});
+                socketRepository.emit('joinSpecificLobby', {'lobbyId': lobbies[index].lobbyId, 'playerId': 'Player 2'});
               },
             ),
             childCount: lobbies.length,
