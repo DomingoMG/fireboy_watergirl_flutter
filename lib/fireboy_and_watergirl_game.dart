@@ -89,6 +89,7 @@ class FireBoyAndWaterGirlGame extends FlameGame with RiverpodGameMixin, Keyboard
   }
 
   Future<void> _addJoystick() async {
+    final gameOnline = ref.read(providerGameStart).asData?.value;
     joystick = JoystickComponent(
       knob: SpriteComponent(
         sprite: await loadSprite('joystick/controller_position.png'),
@@ -102,7 +103,7 @@ class FireBoyAndWaterGirlGame extends FlameGame with RiverpodGameMixin, Keyboard
     );
     final player = ref.read(providerPlayer);
     final character = player.character == 'fireboy' ? fireBoy! : waterGirl!;
-    jumpButton = JumpButton(character);    
+    jumpButton = JumpButton(gameOnline?.isOnline == true ? character : fireBoy!);    
     camera.viewport.add(joystick);
     camera.viewport.add(jumpButton);
   }
