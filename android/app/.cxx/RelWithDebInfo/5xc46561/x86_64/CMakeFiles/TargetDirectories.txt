@@ -1,0 +1,2 @@
+/Users/domingomg/dev/fireboy_watergirl_flutter/android/app/.cxx/RelWithDebInfo/5xc46561/x86_64/CMakeFiles/edit_cache.dir
+/Users/domingomg/dev/fireboy_watergirl_flutter/android/app/.cxx/RelWithDebInfo/5xc46561/x86_64/CMakeFiles/rebuild_cache.dir
