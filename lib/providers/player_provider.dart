@@ -1,4 +1,6 @@
 
+import 'dart:math';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fireboy_and_watergirl/config/sockets/models/player.dart';
 
@@ -14,5 +16,11 @@ class PlayerNotifier extends Notifier<PlayerModel> {
     );
   }
   
-  void setId(String id) => state.id = id;
+  set setName(String name) => state.name = name;
+  set setId(String id) => state.id = id;
+
+  void generateRandomCharacter() {
+    final characterRandom = Random().nextBool() ? 'fireboy' : 'watergirl';
+    state.character = characterRandom;
+  }
 }
