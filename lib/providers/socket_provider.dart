@@ -12,7 +12,7 @@ class SocketNotifier extends Notifier<SocketClientRepository> {
     final socket = SocketClientRepository()..connect();
     socket.on('playerConnected', ( playerJson ) {
       debugPrint('✅ Nuevo jugador conectado: ${playerJson['playerId']}');
-      playerController.setId(playerJson['playerId']);
+      playerController.setId = playerJson['playerId'];
     });
     return socket;
   }
