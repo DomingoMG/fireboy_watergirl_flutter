@@ -5,7 +5,7 @@ homepage: "https://github.com/DomingoMG/fireboy_watergirl_flutter"
 repository: "https://github.com/DomingoMG/fireboy_watergirl_flutter"
 issue_tracker: "https://github.com/DomingoMG/fireboy_watergirl_flutter/issues"
 publish_to: 'none'
-version: 0.0.3
+version: 0.0.4
 
 environment:
   sdk: ^3.5.4
