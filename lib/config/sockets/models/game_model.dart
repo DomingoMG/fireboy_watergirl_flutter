@@ -3,19 +3,22 @@ import 'package:fireboy_and_watergirl/config/sockets/models/player.dart';
 class GameStartModel {
   String lobbyId;
   List<PlayerModel> players;
+  bool isOnline;
   bool isGameStarted;
 
   GameStartModel({
     required this.lobbyId, 
     required this.players,
-    this.isGameStarted = false
+    this.isGameStarted = false,
+    this.isOnline = false
   });
 
   factory GameStartModel.fromGameStartJson(Map<String, dynamic> json) {
     return GameStartModel(
       lobbyId: json['lobbyId'],
       players: (json['players'] as List).map((p) => PlayerModel.fromJson(p)).toList(),
-      isGameStarted: true
+      isGameStarted: true,
+      isOnline: true
     );
   }
 
@@ -27,7 +30,8 @@ class GameStartModel {
     return GameStartModel(
       lobbyId: lobbyId ?? this.lobbyId,
       players: players ?? this.players,
-      isGameStarted: isGameStarted ?? this.isGameStarted
+      isGameStarted: isGameStarted ?? this.isGameStarted,
+      isOnline: isOnline
     );
   }
 
@@ -35,6 +39,7 @@ class GameStartModel {
     return GameStartModel(
       lobbyId: json['lobbyId'],
       players: (json['players'] as List).map((p) => PlayerModel.fromGameJson(p)).toList(),
+      isOnline: true
     );
   }
 
@@ -42,6 +47,8 @@ class GameStartModel {
     return {
       'lobbyId': lobbyId,
       'players': players.map((p) => p.toJson()).toList(),
+      'isGameStarted': isGameStarted,
+      'isOnline': isOnline
     };
   }
 }
