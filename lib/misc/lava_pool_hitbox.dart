@@ -30,7 +30,7 @@ class LavaPoolHitbox extends SpriteAnimationComponent with CollisionCallbacks, D
       HitboxType.lavaPlatform.assetName,
       SpriteAnimationData.sequenced(
         amount: 15, 
-        stepTime: .1, 
+        stepTime: .04, 
         textureSize: Vector2(128, 128)
       ),
     );

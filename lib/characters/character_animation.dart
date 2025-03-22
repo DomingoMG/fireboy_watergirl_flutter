@@ -1,11 +1,17 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame_riverpod/flame_riverpod.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show KeyEvent, LogicalKeyboardKey;
+import 'package:fireboy_and_watergirl/config/sockets/models/player_movement.dart';
+import 'package:fireboy_and_watergirl/providers/game_provider.dart';
+import 'package:fireboy_and_watergirl/providers/movement_provider.dart';
+import 'package:fireboy_and_watergirl/providers/player_provider.dart';
 import 'package:fireboy_and_watergirl/config/config.dart';
 import 'package:fireboy_and_watergirl/fireboy_and_watergirl_game.dart';
 
 abstract class CharacterAnimation extends SpriteAnimationComponent
-    with HasGameReference<FireBoyAndWaterGirlGame>, KeyboardHandler, CollisionCallbacks {
+    with RiverpodComponentMixin, HasGameReference<FireBoyAndWaterGirlGame>, KeyboardHandler, CollisionCallbacks {
   CharacterAnimation({
     required this.characterType,
     required Vector2 size,
@@ -19,6 +25,7 @@ abstract class CharacterAnimation extends SpriteAnimationComponent
   }
 
   final String characterType;
+  JoystickComponent? joystick;
   late SpriteAnimation idleAnimation;
   late SpriteAnimation walkRightAnimation;
   late SpriteAnimation walkLeftAnimation;
@@ -36,10 +43,61 @@ abstract class CharacterAnimation extends SpriteAnimationComponent
   bool stopMoving = false;
 
   @override
+  void onMount() {
+    addToGameWidgetBuild((){
+      final gameStart = ref.read(providerGameStart).value;
+      if( gameStart?.isOnline == false ) return;
+      ref.listen(providerPlayerMovement, ( previous, next ) {
+        _playerOnlineMovement(next);
+      });
+    });
+    super.onMount();
+  }
+
+
+  void _playerOnlineMovement(PlayerMoveModel playerMove) {
+    final player = ref.read(providerPlayer);
+    final gameStart = ref.read(providerGameStart).value;
+
+    if (gameStart?.isOnline == false) return;
+
+    // 📌 Solo actualizar si el personaje en el evento es el correcto
+    debugPrint('✅ Personaje en el evento: ${playerMove.character}');
+    if (playerMove.character != characterType) return;
+
+    // 📌 Ignorar si el evento es del propio jugador
+    if (playerMove.playerId == player.id) return;
+
+    // 🔥 Actualizar solo el otro jugador
+    position.setValues(playerMove.position.x, playerMove.position.y);
+
+    switch (playerMove.action) {      
+      case PlayerMovementAction.moveLeft:
+        final keyEventOnline = characterType == 'fireboy' ? LogicalKeyboardKey.keyA : LogicalKeyboardKey.arrowLeft;
+        moveFromKeyEvent({ keyEventOnline }, false);
+        break;
+      case PlayerMovementAction.moveRight:
+        final keyEventOnline = { characterType == 'fireboy' ? LogicalKeyboardKey.keyD : LogicalKeyboardKey.arrowRight };
+        moveFromKeyEvent(keyEventOnline, false);
+        break;
+      case PlayerMovementAction.jump:
+        jump(sendEvent: false);
+        break;
+      default:
+        moveFromKeyEvent({}, false);
+        velocity.x = 0;
+    }
+  }
+
+  @override
   Future<void> onLoad() async {
     idleAnimation = await game.loadSpriteAnimation(
       'characters/${characterType}_idle.png',
-      SpriteAnimationData.sequenced(amount: characterType == 'fireboy' ? 5 : 11, stepTime: .1, textureSize: Vector2(128, 128)),
+      SpriteAnimationData.sequenced(
+        amount: characterType == 'fireboy' ? 5 : 11, 
+        stepTime: .1, 
+        textureSize: Vector2(128, 128)
+      ),
     );
     walkRightAnimation = await game.loadSpriteAnimation(
       'characters/${characterType}_walk_right.png',
@@ -51,7 +109,10 @@ abstract class CharacterAnimation extends SpriteAnimationComponent
     );
     jumpAnimation = await game.loadSpriteAnimation(
       'characters/${characterType}_jump.png',
-      SpriteAnimationData.sequenced(amount: 8, stepTime: .1, textureSize: Vector2(128, 128)),
+      SpriteAnimationData.sequenced(
+        amount: characterType == 'fireboy' ? 8 : 11, 
+        stepTime: .1, 
+        textureSize: Vector2(128, 128)),
     );
     animation = idleAnimation;
 
@@ -62,9 +123,36 @@ abstract class CharacterAnimation extends SpriteAnimationComponent
 
   @override
   void update(double dt) {
+    if (joystick != null) moveWithJoystick();
+
     position += velocity * dt;
     if (!onGround) velocity.y += gravity * dt;
     super.update(dt);
+  }
+
+  void moveWithJoystick() {
+    final playerMovementController = ref.read(providerPlayerMovement.notifier);
+    if (joystick != null) {
+      double threshold = 0.60; // 🔥 Requiere mover el joystick un 60% para que empiece a moverse
+      double joystickIntensity = joystick!.delta.length; // Cuánto se ha movido el joystick (0 - 1)
+      
+      if(joystickIntensity < threshold) {
+        if( animation == idleAnimation ) return;
+        velocity.x = 0; // Si no se empuja lo suficiente, no se mueve
+        animation = idleAnimation;
+        playerMovementController.sendMove(PlayerMovementAction.idle, position.x, position.y);
+      } else {
+        double normalizedSpeed = ((joystickIntensity - threshold) / (1 - threshold)).clamp(0.0, 1.0); 
+        velocity.x = joystick!.delta.x.sign * speed * normalizedSpeed; // Aplicar velocidad solo cuando pasa el umbral
+        animation = joystick!.delta.x < 0 ? walkLeftAnimation : walkRightAnimation;
+        final playerMovementAction = joystick!.delta.x < 0 ? PlayerMovementAction.moveLeft : PlayerMovementAction.moveRight;
+        playerMovementController.sendMove(playerMovementAction, position.x, position.y);
+      }
+    } else {
+      velocity.x = 0;
+      animation = idleAnimation;
+      playerMovementController.sendMove(PlayerMovementAction.idle, position.x, position.y);
+    }
   }
 
   @override
@@ -72,16 +160,33 @@ abstract class CharacterAnimation extends SpriteAnimationComponent
     if( stopMoving ) return true;
     
     velocity.x = 0;
-    move(keysPressed);
-    jump(keysPressed);
+    moveFromKeyEvent(keysPressed, true);
+    jumpFromKeyEvent(keysPressed, true);
     return true;
   }
 
-  void move(Set<LogicalKeyboardKey> keysPressed);
-  void jump(Set<LogicalKeyboardKey> keysPressed);
+  void moveFromKeyEvent(Set<LogicalKeyboardKey> keysPressed, bool sendEvent);
+  void jumpFromKeyEvent(Set<LogicalKeyboardKey> keysPressed, bool sendEvent);
   void dead() {
     AudioManager.playSound(AudioType.death);
     resetPosition();
+  }
+
+  void jump({required bool sendEvent}) {
+    if( !onGround ) return;
+    final playerMovementController = ref.read(providerPlayerMovement.notifier);
+    if(sendEvent) {
+      playerMovementController.sendMove(PlayerMovementAction.jump, position.x, position.y);
+    }
+    if( characterType == 'fireboy' ) {
+      AudioManager.playSound(AudioType.fireboyJump);
+    } else {
+      AudioManager.playSound(AudioType.waterGirlJump);
+    }
+    animation = jumpAnimation;
+    velocity.y = jumpPower;
+    isJumping = true;
+    onGround = false;
   }
 
   void resetPosition() {

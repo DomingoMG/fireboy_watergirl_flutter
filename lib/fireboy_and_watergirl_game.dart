@@ -1,21 +1,30 @@
 import 'dart:async';
 import 'package:flame/camera.dart';
 import 'package:flame/components.dart';
-import 'package:flame/events.dart';
 import 'package:flame/game.dart';
+import 'package:flame/input.dart';
+import 'package:flame_riverpod/flame_riverpod.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fireboy_and_watergirl/misc/jump_button.dart';
+import 'package:fireboy_and_watergirl/providers/game_provider.dart';
+import 'package:fireboy_and_watergirl/providers/player_provider.dart';
 import 'package:fireboy_and_watergirl/characters/fireboy/fireboy.dart';
 import 'package:fireboy_and_watergirl/characters/watergirl/watergirl.dart';
 import 'package:fireboy_and_watergirl/scenes/level_1.dart';
 import 'package:fireboy_and_watergirl/backgrounds/background.dart';
 import 'package:fireboy_and_watergirl/config/audio/audio_manager.dart';
+import 'package:fireboy_and_watergirl/config/utils/check_devices.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 
-class FireBoyAndWaterGirlGame extends FlameGame with KeyboardEvents, HasCollisionDetection {
-  late FireboyAnimation fireBoy;  
-  late WaterGirlAnimation waterGirl;
+class FireBoyAndWaterGirlGame extends FlameGame with RiverpodGameMixin, KeyboardEvents, HasCollisionDetection {
+  
+  late JoystickComponent joystick;  
+  late JumpButton jumpButton;
+  FireboyAnimation? fireBoy;  
+  WaterGirlAnimation? waterGirl;
   LevelOneSprite? level;
 
   double baseZoom = 1.5;  // Zoom base
@@ -25,43 +34,85 @@ class FireBoyAndWaterGirlGame extends FlameGame with KeyboardEvents, HasCollisio
 
   @override
   Future<void> onLoad() async {
+    super.onLoad();
   }
 
   Future<void> startGame() async {
     debugMode = kDebugMode;
-    final world = FireboyAndWaterGirlWorld();
-    await AudioManager.init();
     AudioManager.playMusicLevel();
-
-    // Camera configuration
+    final gameOnline = ref.read(providerGameStart).asData?.value;
+    final player = ref.read(providerPlayer);
+    final world = FireboyAndWaterGirlWorld();
+    final background = BackgroundOneSprite();
+    
+    level = LevelOneSprite();
+    fireBoy = FireboyAnimation();
+    waterGirl = WaterGirlAnimation();
     camera = CameraComponent(
       world: world,
       viewport: MaxViewport(),
     );
-
+      
     await addAll([world, camera]);
 
-    // Initialization of characters and objects
-    final background = BackgroundOneSprite();
-    level = LevelOneSprite();
-    fireBoy = FireboyAnimation();
-    waterGirl = WaterGirlAnimation();
-
+    if( CheckDevices.isMobile ) {
+      await _addJoystick(); 
+    }
     await world.addAll([
       background,
       level!,
-      fireBoy,
-      waterGirl,
-    ]);
+      fireBoy!,
+      waterGirl!
+    ]);   
+
 
     // The camera follows Fireboy
-    camera.follow(fireBoy, maxSpeed: 300);
+    if( gameOnline?.isOnline == true ) {
+      if(player.character == 'fireboy') {
+        camera.follow(fireBoy!, maxSpeed: 300);
+        if( CheckDevices.isMobile ) {
+          fireBoy?.joystick = joystick;
+        }
+      } else {
+        camera.follow(waterGirl!, maxSpeed: 300);
+        if( CheckDevices.isMobile ) {
+          waterGirl?.joystick = joystick;
+        }
+      }
+      return;
+    }
+
+    camera.follow(fireBoy!, maxSpeed: 300);
+    if( CheckDevices.isMobile ) {
+      fireBoy?.joystick = joystick;
+    }
   }
+
+  Future<void> _addJoystick() async {
+    joystick = JoystickComponent(
+      knob: SpriteComponent(
+        sprite: await loadSprite('joystick/controller_position.png'),
+        size: Vector2.all(50),
+      ),
+      background: SpriteComponent(
+        sprite: await loadSprite('joystick/controller_radius.png'),
+        size: Vector2.all(100),
+      ),
+      margin: const EdgeInsets.only(left: 20, bottom: 20),
+    );
+    final player = ref.read(providerPlayer);
+    final character = player.character == 'fireboy' ? fireBoy! : waterGirl!;
+    jumpButton = JumpButton(character);    
+    camera.viewport.add(joystick);
+    camera.viewport.add(jumpButton);
+  }
+
+  
 
   @override
   void update(double dt) {
     super.update(dt);
-
+    // AudioManager.stopMusicLevel();
     if( level == null ) return;
 
     if( level is LevelOneSprite ) {
@@ -69,7 +120,7 @@ class FireBoyAndWaterGirlGame extends FlameGame with KeyboardEvents, HasCollisio
     }
 
     // Adjust the zoom according to the distance between FireBoy and Watergirl
-    final distance = (fireBoy.position - waterGirl.position).length;
+    final distance = (fireBoy!.position - waterGirl!.position).length;
     final zoomFactor = (1 - (distance / maxDistance)).clamp(0.0, 1.0);
 
     camera.viewfinder.zoom =
@@ -78,8 +129,20 @@ class FireBoyAndWaterGirlGame extends FlameGame with KeyboardEvents, HasCollisio
 
   @override
   KeyEventResult onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
-    fireBoy.onKeyEvent(event, keysPressed);
-    waterGirl.onKeyEvent(event, keysPressed);
+    final gameStart = ref.read(providerGameStart).asData?.value;
+    final player = ref.read(providerPlayer);
+
+    if( gameStart?.isOnline == true ){
+      if( player.character == 'fireboy' ) {
+        fireBoy?.onKeyEvent(event, keysPressed);
+      } else {
+        waterGirl?.onKeyEvent(event, keysPressed);
+      }
+      return super.onKeyEvent(event, keysPressed);
+    }
+
+    fireBoy?.onKeyEvent(event, keysPressed);
+    waterGirl?.onKeyEvent(event, keysPressed);
     return super.onKeyEvent(event, keysPressed);
   }
 
