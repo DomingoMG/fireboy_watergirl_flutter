@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:fireboy_and_watergirl/main.dart';
+import 'package:fireboy_and_watergirl/providers/game_provider.dart';
 import 'package:fireboy_and_watergirl/providers/game_state_provider.dart';
 import 'package:fireboy_and_watergirl/providers/socket_provider.dart';
 import 'package:fireboy_and_watergirl/overlays/lobby_menu.dart';
@@ -112,9 +113,11 @@ class _MainMenuState extends ConsumerState<MainMenuOverlay> {
                             hoverColor: Colors.red.shade900,
                             fontColor: Colors.white,
                             onPressed: () {
+                              final gameStartController = ref.read(providerGameStart.notifier);
                               AudioManager.stopPlayIntroMusic();
                               overlays.remove(MainMenuOverlay.pathRoute);
                               gameInstance.startGame();
+                              gameStartController.startOfflineGame();
                             },
                           ),
                           const Gap(20),
