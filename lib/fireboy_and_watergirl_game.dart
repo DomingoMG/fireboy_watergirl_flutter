@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:fireboy_and_watergirl/config/utils/check_devices.dart';
 import 'package:flame/camera.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
@@ -16,6 +15,8 @@ import 'package:fireboy_and_watergirl/characters/watergirl/watergirl.dart';
 import 'package:fireboy_and_watergirl/scenes/level_1.dart';
 import 'package:fireboy_and_watergirl/backgrounds/background.dart';
 import 'package:fireboy_and_watergirl/config/audio/audio_manager.dart';
+import 'package:fireboy_and_watergirl/config/utils/check_devices.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 
 class FireBoyAndWaterGirlGame extends FlameGame with RiverpodGameMixin, KeyboardEvents, HasCollisionDetection {
@@ -40,7 +41,7 @@ class FireBoyAndWaterGirlGame extends FlameGame with RiverpodGameMixin, Keyboard
     debugMode = kDebugMode;
     await AudioManager.init();
     // AudioManager.playMusicLevel();
-    final gameOnline = ref.read(providerGameStart).value;
+    final gameOnline = ref.read(providerGameStart).asData?.value;
     final player = ref.read(providerPlayer);
     final world = FireboyAndWaterGirlWorld();
     final background = BackgroundOneSprite();
@@ -67,7 +68,7 @@ class FireBoyAndWaterGirlGame extends FlameGame with RiverpodGameMixin, Keyboard
 
 
     // The camera follows Fireboy
-    if( gameOnline != null ) {
+    if( gameOnline?.isOnline == true ) {
       if(player.character == 'fireboy') {
         camera.follow(fireBoy!, maxSpeed: 300);
         if( CheckDevices.isMobile ) {
@@ -79,6 +80,12 @@ class FireBoyAndWaterGirlGame extends FlameGame with RiverpodGameMixin, Keyboard
           waterGirl?.joystick = joystick;
         }
       }
+      return;
+    }
+
+    camera.follow(fireBoy!, maxSpeed: 300);
+    if( CheckDevices.isMobile ) {
+      fireBoy?.joystick = joystick;
     }
   }
 
@@ -123,12 +130,20 @@ class FireBoyAndWaterGirlGame extends FlameGame with RiverpodGameMixin, Keyboard
 
   @override
   KeyEventResult onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
+    final gameStart = ref.read(providerGameStart).asData?.value;
     final player = ref.read(providerPlayer);
-    if( player.character == 'fireboy' ) {
-      fireBoy?.onKeyEvent(event, keysPressed);
-    } else {
-      waterGirl?.onKeyEvent(event, keysPressed);
+
+    if( gameStart?.isOnline == true ){
+      if( player.character == 'fireboy' ) {
+        fireBoy?.onKeyEvent(event, keysPressed);
+      } else {
+        waterGirl?.onKeyEvent(event, keysPressed);
+      }
+      return super.onKeyEvent(event, keysPressed);
     }
+
+    fireBoy?.onKeyEvent(event, keysPressed);
+    waterGirl?.onKeyEvent(event, keysPressed);
     return super.onKeyEvent(event, keysPressed);
   }
 
