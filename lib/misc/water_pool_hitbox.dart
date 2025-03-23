@@ -38,17 +38,25 @@ class WaterPoolHitbox extends SpriteAnimationComponent with CollisionCallbacks, 
       size: Vector2(160, 12), // Altura positiva
       position: Vector2(0, size.y-50), // Moverlo abajo
     );
-    add(groundHitbox);
-    add(DiagonalFloorHitbox(
-      diagonalLeftStart: false,
-      position: Vector2(0, 50),
-      size: Vector2(54.2, 25.4),
-    ));
-    add(DiagonalFloorHitbox(
-      diagonalLeftStart: true,
-      position: Vector2(111.60, 51.60),
-      size: Vector2(54.2, 25.4),
-    ));
+
+    addAll([
+      groundHitbox,
+      DiagonalFloorHitbox(
+        diagonalLeftStart: false,
+        position: Vector2(0, 50),
+        size: Vector2(54.2, 25.4),
+      ),
+      DiagonalFloorHitbox(
+        diagonalLeftStart: true,
+        position: Vector2(111.60, 51.60),
+        size: Vector2(54.2, 25.4),
+      ),
+      DeathZone(
+        characterType: 'fireboy',
+        size: Vector2(130, 12),
+        position: Vector2(18, size.y-65),
+      ),
+    ]);
   }
 
   @override
@@ -68,52 +76,12 @@ class WaterPoolHitbox extends SpriteAnimationComponent with CollisionCallbacks, 
         other.position.y = position.y + groundHitbox.position.y - other.size.y-25;
       }
     }
+    if( other is BoxHitbox ){
+      if( isColliding ){
+        other.onGround = true;
+        other.position.y = position.y + groundHitbox.position.y - other.size.y-55;
+      }
+    }
     super.onCollision(intersectionPoints, other);
   }
-
-
-  // @override
-  // void onDragStart(DragStartEvent event) {
-  //   if( !kDebugMode ) return;
-  //   Vector2 localPosition = event.localPosition;
-
-  //   // Verificar si el usuario está agarrando la esquina inferior derecha
-  //   if ((localPosition.x >= size.x - resizeThreshold && localPosition.y >= size.y - resizeThreshold)) {
-  //     isResizing = true;
-  //   }
-  //   super.onDragStart(event);
-  // }
-
-  // @override
-  // void onDragUpdate(DragUpdateEvent event) {
-  //  if( !kDebugMode ) return;
-  //  if (isResizing) {
-  //     // Redimensionar sin que se invierta
-  //     size += event.localDelta;
-  //     size.clamp(Vector2(20, 20), Vector2(500, 500)); // Define un tamaño mínimo y máximo
-  //   } else {
-  //     // Mueve el bloque si no está en modo redimensionamiento
-  //     position += event.localDelta;
-  //   }
-  //   super.onDragUpdate(event);
-  // }
-
-  // @override
-  // void onDragEnd(DragEndEvent event) {
-  //   if( !kDebugMode ) return;
-  //   isResizing = false;
-  //   debugPrint('Water pool position: x=${position.x}, y=${position.y}, Size: w=${size.x}, h=${size.y}');
-  //   super.onDragEnd(event);
-  // }
-
-  // @override
-  // void render(Canvas canvas) {
-  //   if( !kDebugMode ) return;
-  //   final paint = Paint()..color = Colors.red.withValues(alpha: 0.5);
-  //   canvas.drawRect(
-  //     Rect.fromLTWH(size.x - resizeThreshold, size.y - resizeThreshold, resizeThreshold, resizeThreshold),
-  //     paint,
-  //   );
-  //   super.render(canvas);
-  // }
 }
