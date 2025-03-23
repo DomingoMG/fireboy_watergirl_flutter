@@ -127,6 +127,10 @@ abstract class CharacterAnimation extends SpriteAnimationComponent
 
     position += velocity * dt;
     if (!onGround) velocity.y += gravity * dt;
+
+    if( position.y > CharactersConfig.screenHeight + 200 || position.x > CharactersConfig.screenWidth ) {
+      dead();
+    }
     super.update(dt);
   }
 
