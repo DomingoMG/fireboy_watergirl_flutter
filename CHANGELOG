@@ -1,5 +1,33 @@
-## [0.0.4] 2025-03-22 – Online Multiplayer Integration & Web Deployment
+## [0.0.5] 2025-03-23 – Box Mechanics & Nickname System
+### ✨ Features
+- Added **BoxHitbox** with gravity, collision response and respawn logic when falling off the map.
+- Implemented **collision response with acid pools**: boxes now respawn when falling into acid.
+- Integrated new **hitbox types**: `box`, `door`, `diamond`, and `jump_button`.
+- Boxes are now added and rendered in Level 1, fully interactive with characters.
+- Added **DeathZone** logic to lava and water pools using `characterType` for Fireboy and Watergirl.
+- Exit button in main menu now directly calls `exit(0)` to close the app.
 
+### 🧠 Logic Enhancements
+- Added off-screen boundary check for characters, triggering death if player falls off map.
+- Characters on top of a box move together with it when pushed from the side.
+- Improved lava and water pool structure using `addAll()` for more concise hitbox composition.
+
+### 🛠️ UI Improvements
+- Showed **NicknameDialog** after frame when player name is empty in main menu.
+- Created **NicknameDialog UI with validation** for player input.
+- Removed default player name logic from `PlayerNotifier` and added a proper `name` getter.
+- Used **dynamic player name** when joining a multiplayer lobby instead of hardcoded ID.
+
+### 📁 Refactoring & Structure
+- Exported new hitbox files in `misc.dart`: `box_hitbox.dart`, `door_hitbox.dart`, `diamond_hitbox.dart`, `jump_button.dart`.
+- Refactored lava and water pool components for better composition and readability.
+
+---
+This version adds physics mechanics with boxes, improves level collisions and reinforces the player identity system with a custom name system, improving the experience in online mode and in the main menu.
+
+
+
+## [0.0.4] 2025-03-22 – Online Multiplayer Integration & Web Deployment
 ### ✨ Features
 - Implemented **online multiplayer support** using `Riverpod` and `Socket.IO` integration.
 - Added `GameStartModel`, `PlayerModel`, and `PlayerMoveModel` for managing lobby, player info and movements.
