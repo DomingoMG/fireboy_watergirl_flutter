@@ -39,6 +39,8 @@ class FireBoyAndWaterGirlGame extends FlameGame with RiverpodGameMixin, Keyboard
 
   Future<void> startGame() async {
     debugMode = kDebugMode;
+    level?.disposeLevel();
+    clearWorld();
     AudioManager.playMusicLevel();
     final gameOnline = ref.read(providerGameStart).asData?.value;
     final player = ref.read(providerPlayer);
@@ -87,6 +89,20 @@ class FireBoyAndWaterGirlGame extends FlameGame with RiverpodGameMixin, Keyboard
       fireBoy?.joystick = joystick;
     }
   }
+
+  void clearWorld() {
+    // Limpiamos el world por completo
+    removeAll(world.children);
+
+    // Limpiamos la viewport de la camera
+    removeAll(camera.viewport.children);
+
+    // Reiniciamos instancias
+    fireBoy = null;
+    waterGirl = null;
+    level = null;
+  }
+
 
   Future<void> _addJoystick() async {
     final gameOnline = ref.read(providerGameStart).asData?.value;
