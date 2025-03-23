@@ -58,52 +58,9 @@ class AcidPoolHitbox extends SpriteAnimationComponent with CollisionCallbacks, D
       if( isColliding ) other.dead();
     } else if( other is FireboyAnimation ){
       if( isColliding ) other.dead();
+    } else if ( other is BoxHitbox ) {
+      other.respawn();
     }
     super.onCollisionStart(intersectionPoints, other);
   }
-
-  // @override
-  // void onDragStart(DragStartEvent event) {
-  //   if( !kDebugMode ) return;
-  //   Vector2 localPosition = event.localPosition;
-
-  //   // Verificar si el usuario está agarrando la esquina inferior derecha
-  //   if ((localPosition.x >= size.x - resizeThreshold && localPosition.y >= size.y - resizeThreshold)) {
-  //     isResizing = true;
-  //   }
-  //   super.onDragStart(event);
-  // }
-
-  // @override
-  // void onDragUpdate(DragUpdateEvent event) {
-  //  if( !kDebugMode ) return;
-  //  if (isResizing) {
-  //     // Redimensionar sin que se invierta
-  //     size += event.localDelta;
-  //     size.clamp(Vector2(20, 20), Vector2(500, 500)); // Define un tamaño mínimo y máximo
-  //   } else {
-  //     // Mueve el bloque si no está en modo redimensionamiento
-  //     position += event.localDelta;
-  //   }
-  //   super.onDragUpdate(event);
-  // }
-
-  // @override
-  // void onDragEnd(DragEndEvent event) {
-  //   if( !kDebugMode ) return;
-  //   isResizing = false;
-  //   debugPrint('Acid pool position: x=${position.x}, y=${position.y}, Size: w=${size.x}, h=${size.y}');
-  //   super.onDragEnd(event);
-  // }
-
-  // @override
-  // void render(Canvas canvas) {
-  //   if( !kDebugMode ) return;
-  //   final paint = Paint()..color = Colors.red.withValues(alpha: 0.5);
-  //   canvas.drawRect(
-  //     Rect.fromLTWH(size.x - resizeThreshold, size.y - resizeThreshold, resizeThreshold, resizeThreshold),
-  //     paint,
-  //   );
-  //   super.render(canvas);
-  // }
 }
