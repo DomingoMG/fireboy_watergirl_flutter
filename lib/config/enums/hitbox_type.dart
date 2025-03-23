@@ -1,4 +1,5 @@
 enum HitboxType { 
+  box(assetName: 'misc/move_box.png'),
   blueDoor(assetName: 'doors/blue_door_close.png'),
   redDoor(assetName: 'doors/red_door_close.png'),
   lavaPlatform(assetName: 'puddles/large_lava_pool.png'),
