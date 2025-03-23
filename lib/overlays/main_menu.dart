@@ -1,10 +1,10 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:fireboy_and_watergirl/main.dart';
 import 'package:fireboy_and_watergirl/providers/game_provider.dart';
+import 'package:fireboy_and_watergirl/overlays/widgets/dialogs/nickname_dialog.dart';
+import 'package:fireboy_and_watergirl/providers/player_provider.dart';
 import 'package:fireboy_and_watergirl/providers/game_state_provider.dart';
 import 'package:fireboy_and_watergirl/providers/socket_provider.dart';
 import 'package:fireboy_and_watergirl/overlays/lobby_menu.dart';
@@ -26,6 +26,16 @@ class _MainMenuState extends ConsumerState<MainMenuOverlay> {
     ref.read(providerSocketRepository);
     ref.read(providerGameOnlineState);
     AudioManager.playIntroMusic();
+
+    WidgetsBinding.instance.addPostFrameCallback((_ ){
+      final playerModelController = ref.read(providerPlayer.notifier);
+      if( playerModelController.name.isNotEmpty ) return;
+      showDialog(
+        context: context, 
+        builder: (context) => const NicknameDialog(),
+        barrierDismissible: false,
+      );
+    });
     super.initState();
   }
 
@@ -146,7 +156,7 @@ class _MainMenuState extends ConsumerState<MainMenuOverlay> {
                             fontColor: Colors.white,
                             onPressed: () {
                               AudioManager.stopPlayIntroMusic();
-                              exit(0);
+                              // exit(0);
                             },
                           ),
                         ],
