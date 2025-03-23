@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fireboy_and_watergirl/config/audio/audio_manager.dart';
 import 'package:fireboy_and_watergirl/overlays/lobby_menu.dart';
 import 'package:fireboy_and_watergirl/main.dart';
+import 'package:fireboy_and_watergirl/providers/player_provider.dart';
 import 'package:fireboy_and_watergirl/overlays/widgets/lobby_item_widget.dart';
 import 'package:fireboy_and_watergirl/providers/lobby_provider.dart';
 import 'package:fireboy_and_watergirl/overlays/waiting_player.dart';
@@ -59,11 +60,12 @@ class LobbyBuilders extends ConsumerWidget {
               lobby: lobbies[index],
               onTap: () {
                 ref.read(providerGameStart);
+                final playerModel = ref.read(providerPlayer);
                 final socketRepository = ref.read(providerSocketRepository);
                 AudioManager.stopPlayIntroMusic();
                 gameInstance.overlays.remove(LobbyMenuOverlay.pathRoute);
                 gameInstance.overlays.add(WaitingPlayerOverlay.pathRoute);
-                socketRepository.emit('joinSpecificLobby', {'lobbyId': lobbies[index].lobbyId, 'playerId': 'Player 2'});
+                socketRepository.emit('joinSpecificLobby', {'lobbyId': lobbies[index].lobbyId, 'playerId': playerModel.name});
               },
             ),
             childCount: lobbies.length,
