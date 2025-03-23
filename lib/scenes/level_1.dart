@@ -7,8 +7,6 @@ import 'package:fireboy_and_watergirl/overlays/main_menu.dart';
 import 'package:fireboy_and_watergirl/config/audio/audio_manager.dart';
 import 'package:fireboy_and_watergirl/fireboy_and_watergirl_game.dart';
 import 'package:fireboy_and_watergirl/config/enums/audio_type.dart';
-import 'package:fireboy_and_watergirl/misc/diamond_hitbox.dart';
-import 'package:fireboy_and_watergirl/misc/door_hitbox.dart';
 
 class LevelOneSprite extends SpriteComponent with HasGameReference<FireBoyAndWaterGirlGame> {
 
@@ -291,6 +289,13 @@ class LevelOneSprite extends SpriteComponent with HasGameReference<FireBoyAndWat
     ),
   ];
 
+  final List<PositionComponent> _boxes = [
+    BoxHitbox(
+      position: Vector2(998, 514),
+      size: Vector2(45, 45),
+    ),
+  ];
+
   @override
   Future<void> onLoad() async {
     final backgroundImage = await Flame.images.load('levels/level_1.png');
@@ -308,6 +313,10 @@ class LevelOneSprite extends SpriteComponent with HasGameReference<FireBoyAndWat
 
     for ( final door in _doors ) {
       await add(door);
+    }
+
+    for ( final box in _boxes ) {
+      await add(box);
     }
   }
 
