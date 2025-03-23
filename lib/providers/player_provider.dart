@@ -11,12 +11,13 @@ class PlayerNotifier extends Notifier<PlayerModel> {
   PlayerModel build() {
     return PlayerModel(
       id: '',
-      name: 'Player 1',
+      name: '',
       character: null,
     );
   }
   
   set setName(String name) => state.name = name;
+  String get name => state.name;
   set setId(String id) => state.id = id;
 
   void generateRandomCharacter() {
