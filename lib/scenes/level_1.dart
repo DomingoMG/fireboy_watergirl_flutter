@@ -197,7 +197,7 @@ class LevelOneSprite extends SpriteComponent with HasGameReference<FireBoyAndWat
   final List<PositionComponent> _diamonds = [
     for( int i = 2; i < 22; i++ ) 
       DiamondHitbox(
-        position: Vector2(i * 50 + 10, 650),
+        position: Vector2(i * 50 + 10, i == 13 || i == 18 ? 620 : 650),
         size: Vector2(50, 50),
         diamondType: i % 2 == 0 ? 'red' : 'blue'
       ),
@@ -326,8 +326,7 @@ class LevelOneSprite extends SpriteComponent with HasGameReference<FireBoyAndWat
         ScaleEffect.to(
           Vector2(4.5, 4.5), // Zoom x4.5
           EffectController(duration: 4, curve: Curves.easeOut),
-          onComplete: () async {
-            await Future.delayed(const Duration(seconds: 2));
+          onComplete: () {
             game.overlays.add(MainMenuOverlay.pathRoute);
             game.fireBoy?.resetPosition();
             game.waterGirl?.resetPosition();
@@ -336,5 +335,11 @@ class LevelOneSprite extends SpriteComponent with HasGameReference<FireBoyAndWat
       );
     }
     super.update(dt);
+  }
+
+  /// [disposeLevel] is used to remove all the components of the level
+  void disposeLevel() {
+    removeAll(children);
+    removeFromParent();
   }
 }
