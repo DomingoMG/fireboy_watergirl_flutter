@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
@@ -144,7 +146,7 @@ class _MainMenuState extends ConsumerState<MainMenuOverlay> {
                             fontColor: Colors.white,
                             onPressed: () {
                               AudioManager.stopPlayIntroMusic();
-                              overlays.remove(MainMenuOverlay.pathRoute);
+                              exit(0);
                             },
                           ),
                         ],
