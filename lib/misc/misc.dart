@@ -1,6 +1,10 @@
 export 'acid_pool_hitbox.dart';
+export 'box_hitbox.dart';
 export 'diagonal_floor_hitbox.dart';
+export 'diamond_hitbox.dart';
+export 'door_hitbox.dart';
 export 'fan_hitbox.dart';
 export 'floor_hitbox.dart';
+export 'jump_button.dart';
 export 'lava_pool_hitbox.dart';
 export 'water_pool_hitbox.dart';
